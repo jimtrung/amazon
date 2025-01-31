@@ -19,5 +19,15 @@ func SetupDatabase() error {
 		return err
 	}
 
+	err = migrations.BindDefaultCart()
+	if err != nil {
+		return err
+	}
+
+	err = migrations.BindRuleCart()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
