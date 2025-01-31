@@ -28,9 +28,18 @@ func BindDefaultCart() error {
 func BindRuleCart() error {
 	productsRule := `
 		-- Make sure quantity >= 0
-		ALTER TABLE cart
-		ADD CONSTRAINT check_quantity
-		CHECK (quantity >= 0);
+		DO $$
+		BEGIN
+			-- Check and add constraint for cart quantity
+			IF NOT EXISTS (
+				SELECT 1 FROM pg_constraint
+				WHERE conname = 'check_cart_quantity'
+			) THEN
+				ALTER TABLE cart
+				ADD CONSTRAINT check_cart_quantity
+				CHECK (quantity >= 0);
+			END IF;
+		END $$;
 	`
 
 	_, err := config.DB.Exec(

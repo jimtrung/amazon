@@ -32,20 +32,38 @@ func BindDefaultProducts() error {
 
 func BindRuleProducts() error {
 	productsRule := `
-		-- Make sure 0.0 <= rating_stars <= 5.0
-		ALTER TABLE products
-		ADD CONSTRAINT check_rating_stars_range
-		CHECK (0 <= rating_stars AND rating_stars <= 5.0);
+		DO $$
+		BEGIN
+			-- Check and add constraint for rating_stars range if not exists
+			IF NOT EXISTS (
+				SELECT 1 FROM pg_constraint
+				WHERE conname = 'check_products_rating_stars_range'
+			) THEN
+				ALTER TABLE products
+				ADD CONSTRAINT check_products_rating_stars_range
+				CHECK (0 <= rating_stars AND rating_stars <= 5.0);
+			END IF;
 
-		-- Make sure rating_count >= 0
-		ALTER TABLE products
-		ADD CONSTRAINT check_rating_count
-		CHECK (rating_count >= 0);
+			-- Check and add constraint for rating_count if not exists
+			IF NOT EXISTS (
+				SELECT 1 FROM pg_constraint
+				WHERE conname = 'check_products_rating_count'
+			) THEN
+				ALTER TABLE products
+				ADD CONSTRAINT check_products_rating_count
+				CHECK (rating_count >= 0);
+			END IF;
 
-		-- Make sure price_cents >= 0
-		ALTER TABLE products
-		ADD CONSTRAINT check_price_cents
-		CHECK (price_cents >= 0);
+			-- Check and add constraint for price_cents if not exists
+			IF NOT EXISTS (
+				SELECT 1 FROM pg_constraint
+				WHERE conname = 'check_products_price_cents'
+			) THEN
+				ALTER TABLE products
+				ADD CONSTRAINT check_products_price_cents
+				CHECK (price_cents >= 0);
+			END IF;
+		END $$;
 	`
 
 	_, err := config.DB.Exec(
