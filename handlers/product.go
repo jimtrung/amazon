@@ -36,6 +36,23 @@ func GetProducts(c fiber.Ctx) error {
 	return c.JSON(products)
 }
 
+func DropTable(c fiber.Ctx) error {
+	dropTable := `
+		DROP TABLE cart; 
+		DROP TABLE products;
+	`
+
+	_, err := config.DB.Exec(
+		context.Background(),
+		dropTable,
+	)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(fiber.Map{"message": "Drop successfully"})
+}
+
 func Transfer(c fiber.Ctx) error {
 	var products []models.Product
 

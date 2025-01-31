@@ -5,7 +5,7 @@ type Product struct {
 	Image      string   `json:"image"`
 	Name       string   `json:"name"`
 	Rating     Rating   `json:"rating"`
-	PriceCents int      `json:"price_cents"`
+	PriceCents int      `json:"priceCents"`
 	Keywords   []string `json:"keywords"`
 }
 

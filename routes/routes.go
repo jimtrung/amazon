@@ -10,6 +10,7 @@ func SetupRoutes(app *fiber.App) {
 	//Products
 	app.Get("api/products", handlers.GetProducts)
 	app.Post("api/products/transfer", handlers.Transfer)
+	app.Get("api/products/drop", handlers.DropTable)
 
 	//Cart
 	app.Get("api/cart", handlers.GetCart)
