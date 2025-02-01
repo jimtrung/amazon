@@ -25,10 +25,6 @@ func main() {
 	// Routes handlers
 	routes.SetupRoutes(r)
 
-	// Auth setup
-
-	// Middleware setup
-
 	// Start the server
 	r.Run(":" + config.PORT)
 }

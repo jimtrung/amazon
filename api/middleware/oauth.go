@@ -42,12 +42,3 @@ func NewAuth() {
 		),
 	)
 }
-
-// func GetAuthCallbackFunction(c fiber.Ctx) error {
-// 	user, err := gothic.CompleteUserAuth(c)
-// 	if err != nil {
-// 		return c.Status(401).JSON(fiber.Map{"error": err})
-// 	}
-
-// 	return c.JSON(fiber.Map{"message": user})
-// }
