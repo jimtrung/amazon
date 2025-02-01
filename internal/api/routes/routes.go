@@ -34,5 +34,6 @@ func SetupRoutes(r *gin.Engine) {
 		})
 	}
 
-	//Basic auth
+	//Serve static file
+	r.StaticFile("/login", "login.html")
 }

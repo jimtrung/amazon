@@ -10,7 +10,7 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		username, password, hasAuth := c.Request.BasicAuth()
 
-		if !hasAuth || username != "jimtrung" || password != "int" {
+		if !hasAuth || username != "jimtrung" || password != "trung123" {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 			c.Abort()
 			return

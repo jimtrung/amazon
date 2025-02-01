@@ -62,7 +62,7 @@
         encodedString = btoa(combinedString);
 
         fetch("http://127.0.0.1:8080/protected/auth", {
-          method: 'GET', 
+          method: 'POST', 
           headers: {
             'Authorization': `Basic ${encodedString}`,
           },
