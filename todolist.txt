@@ -1,1 +1,0 @@
-1. Add an basic auth to some of the api paths, only allows get products and cart.

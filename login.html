@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login/Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      color: white;
+      background-color: black;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      border: 2px solid white;
+      border-radius: 10px;
+      padding: 30px;
+      width: 300px;
+    }
+
+    .password-input {
+      margin-left: 4px;
+    }
+
+    .login-button-container {
+      margin-left: 120px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div style="margin-bottom: 10px;">
+      <label for="username">Username: </label>
+      <input id="username" class="username-input" type="text">
+    </div>
+    
+    <div>
+      <label for="password">Password: </label>
+      <input id="password" class="password-input" type="password">
+    </div>
+
+    <div class="login-button-container">
+      <button class="login-button">Login</button>
+    </div>
+  </div>
+  
+  <script>
+    document.querySelector('.login-button')
+      .addEventListener('click', async() => {
+        const username = document.querySelector('.username-input').value;
+        const password = document.querySelector('.password-input').value;
+
+        combinedString = `${username}:${password}`;
+        encodedString = btoa(combinedString);
+
+        fetch("http://127.0.0.1:8080/protected/auth", {
+          method: 'GET', 
+          headers: {
+            'Authorization': `Basic ${encodedString}`,
+          },
+        })
+        .then(response => response.json())
+        .then(console.log)
+        .catch(console.error);
+    });
+  </script>
+</body>
+</html>
