@@ -22,7 +22,7 @@ func main() {
 
 	app.Use(static.New("./amazon"))
 	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendFile("./amazon/amazon.html")
+		return c.SendFile("./amazon/auth.html")
 	})
 
 	log.Fatal(app.Listen(":" + config.PORT))

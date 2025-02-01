@@ -16,10 +16,15 @@ func SetupRoutes(app *fiber.App) {
 
 	// Cart
 	cart := api.Group("/cart")
-	cart.Get("/", handlers.GetCart)       // ✅
-	cart.Post("/add", handlers.AddToCart) // ✅
-	cart.Post("/update", handlers.UpdateCart)
-	cart.Post("/delete", handlers.DeleteFromCart)
-	cart.Get("/drop", handlers.DropCart) //✅
+	cart.Get("/", handlers.GetCart)               // ✅
+	cart.Post("/add", handlers.AddToCart)         // ✅
+	cart.Post("/update", handlers.UpdateCart)     // ✅
+	cart.Post("/delete", handlers.DeleteFromCart) // ✅
+	cart.Get("/drop", handlers.DropCart)          // ✅
+
+	//Authentication
+	auth := app.Group("/auth")
+	//Basic auth
+	auth.Post("/basic", handlers.BasicAuth)
 
 }
