@@ -13,8 +13,8 @@ type User struct {
 
 var users = []User{
 	{username: "trung123", password: "int"},
-	{username: "dajknsd", password: "int"},
-	{username: "dabd", password: "int"},
+	{username: "dajknsd", password: "hafjk"},
+	{username: "dabd", password: "asd"},
 	{username: "driqeq", password: "int"},
 	{username: "dabmd", password: "int"},
 }
@@ -46,12 +46,8 @@ func decodeBase64(authorizationData string) (string, string, error) {
 
 func isValidUser(clUser, clPass string) bool {
 	for _, user := range users {
-		if user.username == clUser {
-			if user.password == clPass {
-				return true
-			} else {
-				return false
-			}
+		if user.username == clUser && user.password == clPass {
+			return true
 		}
 	}
 	return false
@@ -59,6 +55,10 @@ func isValidUser(clUser, clPass string) bool {
 
 func BasicAuth(c fiber.Ctx) error {
 	authorization := c.Get("Authorization")
+	if authorization == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Missing Authorization"})
+	}
+
 	username, password, err := decodeBase64(authorization)
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Failed to decode"})
@@ -68,6 +68,5 @@ func BasicAuth(c fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Login successfully!"})
 	}
 
-	// return c.Status(400).JSON(fiber.Map{"error": "Wrong username/password"})
-	return c.JSON(fiber.Map{"message": username + " " + password})
+	return c.Status(401).JSON(fiber.Map{"error": "Wrong username/password"})
 }

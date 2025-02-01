@@ -25,6 +25,6 @@ func SetupRoutes(app *fiber.App) {
 	//Authentication
 	auth := app.Group("/auth")
 	//Basic auth
-	auth.Post("/basic", handlers.BasicAuth)
+	auth.Get("/basic", handlers.BasicAuth)
 
 }
