@@ -1,4 +1,4 @@
-# Amazon Backend Project ![Amazon Icon](https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg)
+# Amazon Backend Project 
 
 ## Project Overview:
 Amazon is a practice project designed to enhance backend development skills. The project focuses on building a **RESTful API** to better understand backend principles and enhance knowledge of Go programming.
