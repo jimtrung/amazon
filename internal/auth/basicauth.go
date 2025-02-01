@@ -73,6 +73,7 @@ func BasicAuth(c *gin.Context) {
 
 	if isValidUser(username, password) {
 		c.JSON(http.StatusOK, gin.H{"message": "Login successfully!"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Wrong username/password!"})

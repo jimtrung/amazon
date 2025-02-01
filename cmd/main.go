@@ -19,7 +19,9 @@ func main() {
 	}
 
 	// Create app
-	app := gin.Default()
+	app := gin.New()
+	gin.SetMode(gin.ReleaseMode)
+	app.SetTrustedProxies([]string{"127.0.0.1"})
 
 	// Routes handlers
 	routes.SetupRoutes(app)
@@ -27,10 +29,6 @@ func main() {
 	// Auth setup
 
 	// Middleware setup
-	// app.Use(static.New("./amazon"))
-	// app.Get("/", func(c fiber.Ctx) error {
-	// 	return c.SendFile("./amazon/auth.html")
-	// })
 
 	// Start the server
 	app.Run(":" + config.PORT)
