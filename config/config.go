@@ -19,7 +19,7 @@ func ConnectDB() {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbURL := os.Getenv("DB_URL")
+	dbURL := loadDBURL()
 
 	conn, err := pgx.Connect(context.Background(), dbURL)
 	if err != nil {
@@ -27,6 +27,30 @@ func ConnectDB() {
 	}
 
 	DB = conn
-	PORT = os.Getenv("PORT")
 	fmt.Println("Database connected successfully")
+
+	PORT = os.Getenv("PORT")
+}
+
+func CloseDBConnection() {
+	DB.Close(context.Background())
+}
+
+func loadDBURL() string {
+	dbHost := os.Getenv("DB_HOST")
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dbURL := fmt.Sprintf(
+		"%s://%s:%s@localhost:%s/%s",
+		dbHost,
+		dbUser,
+		dbPass,
+		dbPort,
+		dbName,
+	)
+
+	return dbURL
 }
