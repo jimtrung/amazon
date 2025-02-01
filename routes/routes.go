@@ -6,8 +6,8 @@ import (
 	"github.com/jimtrung/amazon/internal/auth"
 )
 
-func SetupRoutes(app *gin.Engine) {
-	api := app.Group("/api")
+func SetupRoutes(r *gin.Engine) {
+	api := r.Group("/api")
 
 	// Products
 	products := api.Group("/products")
@@ -24,7 +24,7 @@ func SetupRoutes(app *gin.Engine) {
 	cart.GET("/drop", handlers.DropCart)          // ✅
 
 	//Authentication
-	autho := app.Group("/auth")
+	autho := r.Group("/auth")
 	//Basic auth
 	autho.GET("/basic", auth.BasicAuth)
 }

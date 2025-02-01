@@ -18,18 +18,17 @@ func main() {
 		log.Fatal("Failed to set up database:", err)
 	}
 
-	// Create app
-	app := gin.New()
 	gin.SetMode(gin.ReleaseMode)
-	app.SetTrustedProxies([]string{"127.0.0.1"})
+	r := gin.New()
+	r.SetTrustedProxies([]string{"127.0.0.1"})
 
 	// Routes handlers
-	routes.SetupRoutes(app)
+	routes.SetupRoutes(r)
 
 	// Auth setup
 
 	// Middleware setup
 
 	// Start the server
-	app.Run(":" + config.PORT)
+	r.Run(":" + config.PORT)
 }
