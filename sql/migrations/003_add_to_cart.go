@@ -9,13 +9,16 @@ import (
 
 func CreateAddToCart() error {
 	addToCart := `
-		CREATE OR REPLACE FUNCTION add_to_cart(add_id UUID, add_quantity INT) 
+		CREATE OR REPLACE FUNCTION add_to_cart(add_id VARCHAR(255), add_quantity INT) 
 		RETURNS VOID AS $$
 		BEGIN
-			INSERT INTO cart (product_id, quantity) 
-			VALUES (add_id, add_quantity)
-			ON CONFLICT (product_id) 
-			DO UPDATE SET quantity = cart.quantity + add_quantity;
+			IF EXISTS (SELECT 1 FROM cart WHERE product_id = add_id) THEN
+				UPDATE cart
+				SET quantity = quantity + add_quantity
+				WHERE product_id = add_id;
+			ELSE 
+				INSERT INTO cart VALUES (add_id, add_quantity);
+			END IF;
 		END;
 		$$ LANGUAGE plpgsql;
 	`
@@ -28,6 +31,6 @@ func CreateAddToCart() error {
 		return err
 	}
 
-	fmt.Println("003_add_to_cart(1/1) - Add to cart function create successfully")
+	fmt.Println("003_add_to_cart(1/1) - Add to cart function created successfully")
 	return nil
 }

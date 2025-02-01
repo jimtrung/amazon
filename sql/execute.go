@@ -34,5 +34,15 @@ func SetupDatabase() error {
 		return err
 	}
 
+	err = migrations.CreateDeleteFromCart()
+	if err != nil {
+		return err
+	}
+
+	err = migrations.CreateUpdateCart()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

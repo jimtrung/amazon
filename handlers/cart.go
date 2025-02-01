@@ -65,7 +65,7 @@ func UpdateCart(c fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.JSON(fiber.Map{"message": "Updated cart"})
+	return c.JSON(fiber.Map{"message": "Cart updated"})
 }
 
 func DeleteFromCart(c fiber.Ctx) error {
@@ -76,14 +76,14 @@ func DeleteFromCart(c fiber.Ctx) error {
 
 	_, err := config.DB.Exec(
 		context.Background(),
-		"DELETE FROM cart where product_id = $1",
+		"SELECT delete_from_cart($1)",
 		cartItem.ProductId,
 	)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.JSON(fiber.Map{"message": "Item deleted to cart"})
+	return c.JSON(fiber.Map{"message": "Item deleted from cart"})
 }
 
 func DropCart(c fiber.Ctx) error {
