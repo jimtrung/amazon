@@ -29,5 +29,10 @@ func SetupDatabase() error {
 		return err
 	}
 
+	err = migrations.CreateAddToCart()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

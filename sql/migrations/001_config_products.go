@@ -26,7 +26,7 @@ func BindDefaultProducts() error {
 		return err
 	}
 
-	fmt.Println("001_config_products - Bind default products successfully")
+	fmt.Println("001_config_products(1/2) - Bind default products successfully")
 	return nil
 }
 
@@ -74,6 +74,6 @@ func BindRuleProducts() error {
 		return err
 	}
 
-	fmt.Println("001_config_products - Bind rules products successfully")
+	fmt.Println("001_config_products(2/2) - Bind rules products successfully")
 	return nil
 }

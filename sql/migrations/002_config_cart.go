@@ -21,7 +21,7 @@ func BindDefaultCart() error {
 		return err
 	}
 
-	fmt.Println("002_config_cart - Bind default cart successfully")
+	fmt.Println("002_config_cart(1/2) - Bind default cart successfully")
 	return nil
 }
 
@@ -50,6 +50,6 @@ func BindRuleCart() error {
 		return err
 	}
 
-	fmt.Println("002_config_cart - Bind rules cart successfully")
+	fmt.Println("002_config_cart(2/2) - Bind rules cart successfully")
 	return nil
 }

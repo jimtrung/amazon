@@ -40,7 +40,7 @@ func AddToCart(c fiber.Ctx) error {
 
 	_, err := config.DB.Exec(
 		context.Background(),
-		"SELECT add_to_cart($1, $2)",
+		"SELECT add_to_cart($1, $2);",
 		cartItem.ProductId, cartItem.Quantity,
 	)
 	if err != nil {

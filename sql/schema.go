@@ -10,7 +10,7 @@ import (
 func CreateSchema() error {
 	schema := `
 		CREATE TABLE IF NOT EXISTS products (
-			id   		 UUID PRIMARY KEY,
+			id   		 VARCHAR(255) PRIMARY KEY,
 			image		 VARCHAR(255),
 			name 		 VARCHAR(255) NOT NULL,
 			rating_stars FLOAT,
@@ -20,7 +20,7 @@ func CreateSchema() error {
 		);
 
 		CREATE TABLE IF NOT EXISTS cart (
-			product_id UUID,
+			product_id VARCHAR(255),
 			quantity   INT,
 			FOREIGN KEY (product_id) REFERENCES products(id)
 		);
