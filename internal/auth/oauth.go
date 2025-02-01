@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
@@ -38,7 +39,16 @@ func NewAuth() {
 		google.New(
 			googleClientId,
 			googleClientSecret,
-			"http:127.0.0.1:8008/auth/oauth",
+			"http://127.0.0.1:8008/auth/oauth",
 		),
 	)
+}
+
+func GetAuthCallbackFunction(c fiber.Ctx) error {
+	user, err := gothic.CompleteUserAuth(c)
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"error": err})
+	}
+
+	return c.JSON(fiber.Map{"message": user})
 }
