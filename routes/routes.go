@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/jimtrung/amazon/handlers"
+	"github.com/jimtrung/amazon/internal/auth"
 )
 
 func SetupRoutes(app *fiber.App) {
@@ -23,8 +24,7 @@ func SetupRoutes(app *fiber.App) {
 	cart.Get("/drop", handlers.DropCart)          // ✅
 
 	//Authentication
-	auth := app.Group("/auth")
+	autho := app.Group("/auth")
 	//Basic auth
-	auth.Get("/basic", handlers.BasicAuth)
-
+	autho.Get("/basic", auth.BasicAuth)
 }
