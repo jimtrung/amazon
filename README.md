@@ -1,4 +1,4 @@
-### Amazon 
+# Amazon 
 ## Details:
  - Amazon is a practice project for Backend.
  - Most of the Frontend is built while studying Super Simple Dev course (Javascript) (Removed temporary)
