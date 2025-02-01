@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jimtrung/amazon/api/routes"
-	"github.com/jimtrung/amazon/config"
-	"github.com/jimtrung/amazon/sql"
+	"github.com/jimtrung/amazon/internal/api/routes"
+	"github.com/jimtrung/amazon/internal/config"
+	sql "github.com/jimtrung/amazon/internal/database"
 )
 
 func main() {
