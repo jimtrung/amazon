@@ -29,7 +29,7 @@ func SetupRoutes(r *gin.Engine) {
 	protected := r.Group("/protected")
 	protected.Use(middleware.BasicAuthMiddleware())
 	{
-		protected.GET("/auth", func(c *gin.Context) {
+		protected.POST("/auth", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "Authourized"})
 		})
 	}
