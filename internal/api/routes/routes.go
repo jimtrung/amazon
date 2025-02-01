@@ -25,7 +25,7 @@ func SetupRoutes(r *gin.Engine) {
 	cart.DELETE("/delete/:product_id", handlers.DeleteFromCart) // ✅
 	cart.DELETE("/drop", handlers.DropCart)                     // ✅
 
-	// Authentication
+	// Authorization
 	protected := r.Group("/protected")
 	protected.Use(middleware.BasicAuthMiddleware())
 	{
