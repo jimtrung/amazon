@@ -60,11 +60,16 @@
 
         combinedString = `${username}:${password}`;
         encodedString = btoa(combinedString);
-        console.log(encodedString);
 
-        fetch("http://127.0.0.1/auth/basic", {
-          method: "GET"
+        fetch("http://127.0.0.1:8080/auth/basic", {
+          method: 'GET', 
+          headers: {
+            'Authorization': `Basic ${encodedString}`,
+          },
         })
+        .then(response => response.json())
+        .then(console.log)
+        .catch(console.error);
     });
   </script>
 </body>
