@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jimtrung/amazon/api/routes"
 	"github.com/jimtrung/amazon/config"
-	"github.com/jimtrung/amazon/routes"
 	"github.com/jimtrung/amazon/sql"
 )
 

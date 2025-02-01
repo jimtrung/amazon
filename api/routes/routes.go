@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jimtrung/amazon/handlers"
 	"github.com/jimtrung/amazon/internal/auth"
@@ -24,7 +26,12 @@ func SetupRoutes(r *gin.Engine) {
 	cart.GET("/drop", handlers.DropCart)          // ✅
 
 	//Authentication
-	autho := r.Group("/auth")
+	protected := r.Group("/protected")
+	protected.Use(auth.BasicAuthMiddleware())
+	{
+		protected.GET("/auth", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"message": "Authourized"})
+		})
+	}
 	//Basic auth
-	autho.GET("/basic", auth.BasicAuth)
 }
