@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jimtrung/amazon/api/middleware"
-	"github.com/jimtrung/amazon/handlers"
+	"github.com/jimtrung/amazon/internal/api/handlers"
+	"github.com/jimtrung/amazon/internal/api/middleware"
 )
 
 func SetupRoutes(r *gin.Engine) {
