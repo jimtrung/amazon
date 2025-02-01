@@ -13,17 +13,17 @@ func SetupRoutes(r *gin.Engine) {
 
 	// Products
 	products := api.Group("/products")
-	products.GET("/", handlers.GetProducts)       // ✅
-	products.POST("/transfer", handlers.Transfer) // ✅
-	products.GET("/drop", handlers.DropProducts)  // ✅
+	products.GET("/", handlers.GetProducts)         // ✅
+	products.POST("/transfer", handlers.Transfer)   // ✅
+	products.DELETE("/drop", handlers.DropProducts) // ✅
 
 	// Cart
 	cart := api.Group("/cart")
-	cart.GET("/", handlers.GetCart)               // ✅
-	cart.POST("/add", handlers.AddToCart)         // ✅
-	cart.POST("/update", handlers.UpdateCart)     // ✅
-	cart.POST("/delete", handlers.DeleteFromCart) // ✅
-	cart.GET("/drop", handlers.DropCart)          // ✅
+	cart.GET("/", handlers.GetCart)                             // ✅
+	cart.POST("/add", handlers.AddToCart)                       // ✅
+	cart.PATCH("/update", handlers.UpdateCart)                  // ✅
+	cart.DELETE("/delete/:product_id", handlers.DeleteFromCart) // ✅
+	cart.DELETE("/drop", handlers.DropCart)                     // ✅
 
 	// Authentication
 	protected := r.Group("/protected")

@@ -88,18 +88,11 @@ func UpdateCart(c *gin.Context) {
 }
 
 func DeleteFromCart(c *gin.Context) {
-	var cartItem models.CartItem
-	if err := c.Bind(&cartItem); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
+	productId := c.Param("product_id")
 	_, err := config.DB.Exec(
 		context.Background(),
 		"SELECT delete_from_cart($1)",
-		cartItem.ProductId,
+		productId,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
