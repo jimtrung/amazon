@@ -2,8 +2,9 @@ package auth
 
 import (
 	"encoding/base64"
+	"net/http"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gin-gonic/gin"
 )
 
 type User struct {
@@ -53,20 +54,26 @@ func isValidUser(clUser, clPass string) bool {
 	return false
 }
 
-func BasicAuth(c fiber.Ctx) error {
-	authorization := c.Get("Authorization")
+func BasicAuth(c *gin.Context) {
+	authorization := c.GetHeader("Authorization")
 	if authorization == "" {
-		return c.Status(400).JSON(fiber.Map{"error": "Missing Authorization"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Missing header",
+		})
+		return
 	}
 
 	username, password, err := decodeBase64(authorization)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Failed to decode"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
 	if isValidUser(username, password) {
-		return c.JSON(fiber.Map{"message": "Login successfully!"})
+		c.JSON(http.StatusOK, gin.H{"message": "Login successfully!"})
 	}
 
-	return c.Status(401).JSON(fiber.Map{"error": "Wrong username/password"})
+	c.JSON(http.StatusOK, gin.H{"message": "Wrong username/password!"})
 }

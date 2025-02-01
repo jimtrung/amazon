@@ -2,16 +2,20 @@ package handlers
 
 import (
 	"context"
+	"net/http"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gin-gonic/gin"
 	"github.com/jimtrung/amazon/config"
 	"github.com/jimtrung/amazon/models"
 )
 
-func GetCart(c fiber.Ctx) error {
+func GetCart(c *gin.Context) {
 	rows, err := config.DB.Query(context.Background(), "SELECT * FROM cart")
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 	defer rows.Close()
 
@@ -23,19 +27,25 @@ func GetCart(c fiber.Ctx) error {
 			&cartItem.Quantity,
 		)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 		cart = append(cart, cartItem)
 	}
 
-	return c.JSON(cart)
+	c.JSON(http.StatusOK, cart)
 }
 
 // Add item to cart
-func AddToCart(c fiber.Ctx) error {
+func AddToCart(c *gin.Context) {
 	var cartItem models.CartItem
-	if err := c.Bind().JSON(&cartItem); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	if err := c.Bind(&cartItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
 	_, err := config.DB.Exec(
@@ -44,16 +54,22 @@ func AddToCart(c fiber.Ctx) error {
 		cartItem.ProductId, cartItem.Quantity,
 	)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
-	return c.JSON(fiber.Map{"message": "Item added to cart"})
+	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart"})
 }
 
-func UpdateCart(c fiber.Ctx) error {
+func UpdateCart(c *gin.Context) {
 	var cartItem models.CartItem
-	if err := c.Bind().JSON(&cartItem); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	if err := c.Bind(&cartItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
 	_, err := config.DB.Exec(
@@ -62,16 +78,22 @@ func UpdateCart(c fiber.Ctx) error {
 		cartItem.ProductId, cartItem.Quantity,
 	)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
-	return c.JSON(fiber.Map{"message": "Cart updated"})
+	c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
 
-func DeleteFromCart(c fiber.Ctx) error {
+func DeleteFromCart(c *gin.Context) {
 	var cartItem models.CartItem
-	if err := c.Bind().JSON(&cartItem); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	if err := c.Bind(&cartItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
 	_, err := config.DB.Exec(
@@ -80,13 +102,16 @@ func DeleteFromCart(c fiber.Ctx) error {
 		cartItem.ProductId,
 	)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
-	return c.JSON(fiber.Map{"message": "Item deleted from cart"})
+	c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
-func DropCart(c fiber.Ctx) error {
+func DropCart(c *gin.Context) {
 	dropTable := `
 		DROP TABLE cart; 
 	`
@@ -96,8 +121,11 @@ func DropCart(c fiber.Ctx) error {
 		dropTable,
 	)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
-	return c.JSON(fiber.Map{"message": "Drop successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }

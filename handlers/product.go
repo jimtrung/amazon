@@ -2,16 +2,20 @@ package handlers
 
 import (
 	"context"
+	"net/http"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gin-gonic/gin"
 	"github.com/jimtrung/amazon/config"
 	"github.com/jimtrung/amazon/models"
 )
 
-func GetProducts(c fiber.Ctx) error {
+func GetProducts(c *gin.Context) {
 	rows, err := config.DB.Query(context.Background(), "SELECT * FROM products")
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Database query failed: " + err.Error(),
+		})
+		return
 	}
 	defer rows.Close()
 
@@ -28,15 +32,18 @@ func GetProducts(c fiber.Ctx) error {
 			&product.Keywords,
 		)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 		products = append(products, product)
 	}
 
-	return c.JSON(products)
+	c.JSON(http.StatusOK, products)
 }
 
-func DropProducts(c fiber.Ctx) error {
+func DropProducts(c *gin.Context) {
 	dropTable := `
 		DROP TABLE products;
 	`
@@ -46,17 +53,23 @@ func DropProducts(c fiber.Ctx) error {
 		dropTable,
 	)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
-	return c.JSON(fiber.Map{"message": "Drop successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }
 
-func Transfer(c fiber.Ctx) error {
+func Transfer(c *gin.Context) {
 	var products []models.Product
 
-	if err := c.Bind().JSON(&products); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	if err := c.Bind(&products); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
 
 	for _, product := range products {
@@ -68,9 +81,12 @@ func Transfer(c fiber.Ctx) error {
 			product.PriceCents, product.Keywords,
 		)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 	}
 
-	return c.JSON(fiber.Map{"message": "Transfer successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Transfer successfully"})
 }
