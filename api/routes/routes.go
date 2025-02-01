@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jimtrung/amazon/api/middleware"
 	"github.com/jimtrung/amazon/handlers"
-	"github.com/jimtrung/amazon/internal/auth"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -25,13 +25,14 @@ func SetupRoutes(r *gin.Engine) {
 	cart.POST("/delete", handlers.DeleteFromCart) // ✅
 	cart.GET("/drop", handlers.DropCart)          // ✅
 
-	//Authentication
+	// Authentication
 	protected := r.Group("/protected")
-	protected.Use(auth.BasicAuthMiddleware())
+	protected.Use(middleware.BasicAuthMiddleware())
 	{
 		protected.GET("/auth", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "Authourized"})
 		})
 	}
+
 	//Basic auth
 }

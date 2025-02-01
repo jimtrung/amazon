@@ -1,4 +1,4 @@
-package auth
+package middleware
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		username, password, hasAuth := c.Request.BasicAuth()
 
-		if !hasAuth || username != "yourUsername" || password != "yourPassword" {
+		if !hasAuth || username != "jimtrung" || password != "int" {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 			c.Abort()
 			return
