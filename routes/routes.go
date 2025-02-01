@@ -7,14 +7,20 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	//Will make this look pretty later on
+	api := app.Group("/api")
+
 	//Products
-	app.Get("api/products", handlers.GetProducts)
-	app.Post("api/products/transfer", handlers.Transfer)
-	app.Get("api/products/drop", handlers.DropTable)
+	products := api.Group("/products")
+	products.Get("/", handlers.GetProducts)
+	products.Post("/transfer", handlers.Transfer)
+	products.Get("/drop", handlers.DropProducts)
 
 	//Cart
-	app.Get("api/cart", handlers.GetCart)
-	app.Post("api/cart/add", handlers.AddToCart)
-	app.Post("api/cart/update", handlers.UpdateCart)
-	app.Post("api/cart/delete", handlers.DeleteFromCart)
+	cart := api.Group("/cart")
+	cart.Get("/", handlers.GetCart)
+	cart.Post("/add", handlers.AddToCart)
+	cart.Post("/update", handlers.UpdateCart)
+	cart.Post("/delete", handlers.DeleteFromCart)
+	cart.Get("/drop", handlers.DropCart)
+
 }

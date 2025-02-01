@@ -36,9 +36,8 @@ func GetProducts(c fiber.Ctx) error {
 	return c.JSON(products)
 }
 
-func DropTable(c fiber.Ctx) error {
+func DropProducts(c fiber.Ctx) error {
 	dropTable := `
-		DROP TABLE cart; 
 		DROP TABLE products;
 	`
 

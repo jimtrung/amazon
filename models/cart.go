@@ -1,6 +1,6 @@
 package models
 
 type CartItem struct {
-	ProductId string `json:"product_id"`
+	ProductId string `json:"productId"`
 	Quantity  int    `json:"quantity"`
 }

@@ -85,3 +85,19 @@ func DeleteFromCart(c fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{"message": "Item deleted to cart"})
 }
+
+func DropCart(c fiber.Ctx) error {
+	dropTable := `
+		DROP TABLE cart; 
+	`
+
+	_, err := config.DB.Exec(
+		context.Background(),
+		dropTable,
+	)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(fiber.Map{"message": "Drop successfully"})
+}
