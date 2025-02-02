@@ -29,6 +29,7 @@ func SetupRoutes(r *gin.Engine) {
 	users := api.Group("/users")
 	users.GET("/", handlers.GetUsers)
 	users.POST("/add", handlers.AddUser)
+	users.DELETE("/delete/:user_id", handlers.DeleteUser)
 	users.DELETE("/drop", handlers.DropUsers)
 
 	// Authorization

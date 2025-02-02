@@ -79,6 +79,22 @@ func AddUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User added successfully"})
 }
 
+func DeleteUser(c *gin.Context) {
+	userID := c.Param("user_id")
+
+	_, err := config.DB.Exec(
+		context.Background(),
+		`DELETE FROM users WHERE id = $1`,
+		userID,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+}
+
 func DropUsers(c *gin.Context) {
 	dropTable := `
 		DROP TABLE users; 

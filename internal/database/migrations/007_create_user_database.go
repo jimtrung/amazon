@@ -9,8 +9,6 @@ import (
 
 func CreateTableUser() error {
 	createUser := `
-		DROP TABLE users;
-
 		CREATE TABLE IF NOT EXISTS users (
 			id 		 BIGINT,
 			username VARCHAR(255),
