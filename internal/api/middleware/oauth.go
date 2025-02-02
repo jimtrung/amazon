@@ -18,7 +18,7 @@ import (
 const (
 	key    = "trung123"
 	maxAge = 86400 * 30
-	isProd = false
+	isProd = true
 )
 
 func NewAuth() {
@@ -32,7 +32,7 @@ func NewAuth() {
 
 	store := sessions.NewCookieStore([]byte(key))
 	store.MaxAge(maxAge)
-	store.Options.Path = "/auth/oauth"
+	store.Options.Path = "/"
 	store.Options.HttpOnly = true
 	store.Options.Secure = isProd
 
@@ -49,7 +49,6 @@ func NewAuth() {
 
 func GetAuthCallBackFunction(c *gin.Context) {
 	provider := c.Param("provider")
-
 	c.Request = c.Request.WithContext(context.WithValue(
 		context.Background(),
 		"provider",
@@ -64,6 +63,7 @@ func GetAuthCallBackFunction(c *gin.Context) {
 
 	fmt.Println(user)
 	c.Redirect(http.StatusFound, "http://127.0.0.1:8080")
+	c.JSON(http.StatusOK, gin.H{"message": "OAuth succeed"})
 }
 
 func BeginAuthProviderCallback(c *gin.Context) {
