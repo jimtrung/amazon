@@ -49,8 +49,26 @@ func SetupDatabase() error {
 		return err
 	}
 
-	// 006_create_user_database.go
+	// 006_generate_uid.go
+	err = migrations.CreateUIDGenerator()
+	if err != nil {
+		return err
+	}
+
+	// 007_create_user_database.go
 	err = migrations.CreateTableUser()
+	if err != nil {
+		return err
+	}
+
+	// 008_config_users.go
+	err = migrations.BindDefaultUsers()
+	if err != nil {
+		return err
+	}
+
+	// 008_config_users.go
+	err = migrations.BindRuleUsers()
 	if err != nil {
 		return err
 	}

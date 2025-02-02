@@ -28,6 +28,7 @@ func SetupRoutes(r *gin.Engine) {
 	//User
 	users := api.Group("/users")
 	users.GET("/", handlers.GetUsers)
+	users.DELETE("/drop", handlers.DropUsers)
 
 	// Authorization
 	protected := r.Group("/protected")

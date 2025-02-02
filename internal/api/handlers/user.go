@@ -41,3 +41,30 @@ func GetUsers(c *gin.Context) {
 
 	c.JSON(http.StatusOK, users)
 }
+
+func AddUser(c *gin.Context) {
+	var user models.User
+	if err := c.Bind(&user); err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+	}
+
+}
+
+func DropUsers(c *gin.Context) {
+	dropTable := `
+		DROP TABLE users; 
+	`
+
+	_, err := config.DB.Exec(
+		context.Background(),
+		dropTable,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
+}

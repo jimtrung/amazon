@@ -8,14 +8,14 @@ import (
 )
 
 func BindDefaultCart() error {
-	productsDefault := `
+	cartDefault := `
 		ALTER TABLE cart
 		ALTER COLUMN quantity SET DEFAULT 0;
 	`
 
 	_, err := config.DB.Exec(
 		context.Background(),
-		productsDefault,
+		cartDefault,
 	)
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func BindDefaultCart() error {
 }
 
 func BindRuleCart() error {
-	productsRule := `
+	cartRule := `
 		-- Make sure quantity >= 0
 		DO $$
 		BEGIN
@@ -44,7 +44,7 @@ func BindRuleCart() error {
 
 	_, err := config.DB.Exec(
 		context.Background(),
-		productsRule,
+		cartRule,
 	)
 	if err != nil {
 		return err
