@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/http"
 	"regexp"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jimtrung/amazon/internal/api/models"
 	"github.com/jimtrung/amazon/internal/config"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetUsers(c *gin.Context) {
@@ -45,7 +47,7 @@ func GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func AddUser(c *gin.Context) {
+func Signup(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
 		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
@@ -63,11 +65,17 @@ func AddUser(c *gin.Context) {
 		return
 	}
 
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
 	_, err = config.DB.Exec(
 		context.Background(),
 		`INSERT INTO users (username, password, email, phone, country) 
 		VALUES ($1, $2, $3, $4, $5)`,
-		username, user.Password,
+		username, hash,
 		user.Email, user.Phone,
 		user.Country,
 	)
@@ -112,6 +120,37 @@ func DropUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
+}
+
+func Login(c *gin.Context) {
+	var user models.UserResponse
+	if err := c.Bind(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	row := config.DB.QueryRow(
+		context.Background(),
+		`SELECT password FROM users WHERE username = $1`,
+		user.Username,
+	)
+
+	var hashedPassword string
+	err := row.Scan(&hashedPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Login successfully"})
 }
 
 func isValidUsername(rawUsername string) (string, error) {

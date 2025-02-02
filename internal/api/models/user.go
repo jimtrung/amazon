@@ -8,3 +8,8 @@ type User struct {
 	Phone    string `json:"phone"`
 	Country  string `json:"country"`
 }
+
+type UserResponse struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
