@@ -7,6 +7,7 @@ Amazon is a practice project designed to enhance backend development skills. The
 - **Frontend**: Initially developed during the Super Simple Dev course (JavaScript). *(Temporarily removed to focus on backend development.)* 🖥️  
 - **Backend**: Built using **Go** to explore the intricacies of **REST API** development. 🏗️  
 - **Framework**: Currently using **Gin** for its performance, simplicity, and built-in support for authentication (OAuth, JWT, etc.). 🔥  
+- **Database**: **PostgreSQL** is being used to store and manage data effectively. 🗄️  
 
 ## Current Progress:
 - REST API development is ongoing, with core functionalities in place. 🚧  
