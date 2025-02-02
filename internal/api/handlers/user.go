@@ -65,9 +65,11 @@ func AddUser(c *gin.Context) {
 
 	_, err = config.DB.Exec(
 		context.Background(),
-		`INSERT INTO users (username, password) 
-		VALUES ($1, $2)`,
+		`INSERT INTO users (username, password, email, phone, country) 
+		VALUES ($1, $2, $3, $4, $5)`,
 		username, user.Password,
+		user.Email, user.Phone,
+		user.Country,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
