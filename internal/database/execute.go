@@ -49,5 +49,11 @@ func SetupDatabase() error {
 		return err
 	}
 
+	// 006_create_user_database.go
+	err = migrations.CreateTableUser()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
