@@ -9,21 +9,19 @@ import (
 
 func CreateUIDGenerator() error {
 	generateUID := `
-		CREATE OR REPLACE FUNCTION generate_uid(size INT) RETURNS TEXT AS $$
+		CREATE OR REPLACE FUNCTION generate_uid()
+		RETURNS BIGINT AS $$
 		DECLARE
-			characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-			bytes BYTEA := gen_random_bytes(size);
-			l INT := length(characters);
-			i INT := 0;
-			output TEXT := '';
+			new_id BIGINT;
 		BEGIN
-			WHILE i < size LOOP
-				output := output || substr(characters, get_byte(bytes, i) % l + 1, 1);
-				i := i + 1;
+			LOOP
+				new_id := 1000000000 + floor(random() * 9000000000)::BIGINT;
+
+				EXIT WHEN NOT EXISTS (SELECT 1 FROM users WHERE id = new_id);
 			END LOOP;
-			RETURN output;
+			RETURN new_id;
 		END;
-		$$ LANGUAGE plpgsql VOLATILE;
+		$$ LANGUAGE plpgsql;
 	`
 
 	_, err := config.DB.Exec(

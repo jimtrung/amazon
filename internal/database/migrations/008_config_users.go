@@ -10,9 +10,10 @@ import (
 func BindDefaultUsers() error {
 	usersDefault := `
 		ALTER TABLE users
-		ALTER COLUMN email SET DEFAULT no_email
-		ALTER COLUMN phone SET DEFAULT no_phone
-		ALTER COLUMN country SET DEFAULT global;
+		ALTER COLUMN id SET DEFAULT generate_uid(),
+		ALTER COLUMN email SET DEFAULT 'no_email',
+		ALTER COLUMN phone SET DEFAULT 'no_phone',
+		ALTER COLUMN country SET DEFAULT 'global';
 	`
 
 	_, err := config.DB.Exec(

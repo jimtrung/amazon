@@ -10,7 +10,7 @@ import (
 func CreateTableUser() error {
 	createUser := `
 		CREATE TABLE IF NOT EXISTS users (
-			id 		 INT PRIMARY KEY generate_uid(10),
+			id 		 INT PRIMARY KEY,
 			username VARCHAR(255) NOT NULL,
 			password VARCHAR(255) NOT NULL,
 			email    VARCHAR(255),
