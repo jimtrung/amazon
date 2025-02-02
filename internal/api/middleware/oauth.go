@@ -1,9 +1,13 @@
 package middleware
 
 import (
+	"context"
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
@@ -38,7 +42,36 @@ func NewAuth() {
 		google.New(
 			googleClientId,
 			googleClientSecret,
-			"http://127.0.0.1:8008/protected/oauth",
+			"http://127.0.0.1:8080/auth/google/callback",
 		),
 	)
+}
+
+func GetAuthCallBackFunction(c *gin.Context) {
+	provider := c.Param("provider")
+
+	c.Request = c.Request.WithContext(context.WithValue(
+		context.Background(),
+		"provider",
+		provider,
+	))
+
+	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println(user)
+	c.Redirect(http.StatusFound, "http://127.0.0.1:8080")
+}
+
+func BeginAuthProviderCallback(c *gin.Context) {
+	provider := c.Param("provider")
+	c.Request = c.Request.WithContext(context.WithValue(
+		context.Background(),
+		"provider",
+		provider,
+	))
+	gothic.BeginAuthHandler(c.Writer, c.Request)
 }

@@ -40,7 +40,9 @@ func SetupRoutes(r *gin.Engine) {
 			c.JSON(http.StatusOK, gin.H{"message": "Authourized"})
 		})
 	}
+	r.GET("/auth/:provider", middleware.BeginAuthProviderCallback)
+	r.GET("/auth/:provider/callback", middleware.GetAuthCallBackFunction)
 
 	//Serve static file
-	r.StaticFile("/login", "login.html")
+	r.StaticFile("/", "login.html")
 }

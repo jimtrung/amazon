@@ -50,9 +50,16 @@
     <div class="login-button-container">
       <button class="login-button">Login</button>
     </div>
+    <div>
+      <button onclick="loginWithGoogle()">Login With Google</button>
+    </div>
   </div>
   
   <script>
+    function loginWithGoogle() {
+      window.location.href = "http://127.0.0.1:8080/auth/google"
+    }
+
     document.querySelector('.login-button')
       .addEventListener('click', async() => {
         const username = document.querySelector('.username-input').value;

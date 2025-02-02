@@ -4,12 +4,15 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jimtrung/amazon/internal/api/middleware"
 	"github.com/jimtrung/amazon/internal/api/routes"
 	"github.com/jimtrung/amazon/internal/config"
 	"github.com/jimtrung/amazon/internal/database"
 )
 
 func main() {
+	middleware.NewAuth()
+
 	// Database setup
 	config.ConnectDB()
 
