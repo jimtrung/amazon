@@ -13,9 +13,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	// Products
 	products := api.Group("/products")
-	products.GET("/", handlers.GetProducts)         // ✅
-	products.POST("/transfer", handlers.Transfer)   // ✅
-	products.DELETE("/drop", handlers.DropProducts) // ✅
+	products.GET("/", handlers.GetProducts)       // ✅
+	products.POST("/transfer", handlers.Transfer) // ✅
 
 	// Cart
 	cart := api.Group("/cart")
@@ -23,24 +22,27 @@ func SetupRoutes(r *gin.Engine) {
 	cart.POST("/add", handlers.AddToCart)                       // ✅
 	cart.PATCH("/update", handlers.UpdateCart)                  // ✅
 	cart.DELETE("/delete/:product_id", handlers.DeleteFromCart) // ✅
-	cart.DELETE("/drop", handlers.DropCart)                     // ✅
 
 	//User
 	users := api.Group("/users")
 	users.GET("/", handlers.GetUsers)
 	users.POST("/signup", handlers.Signup)
 	users.POST("/login", handlers.Login)
-	users.DELETE("/delete/:user_id", handlers.DeleteUser)
-	users.DELETE("/drop", handlers.DropUsers)
 
-	// Authorization
+	// Admin
 	protected := r.Group("/protected")
 	protected.Use(middleware.BasicAuthMiddleware())
 	{
 		protected.POST("/auth", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"message": "Authourized"})
 		})
+		protected.DELETE("/delete/:user_id", handlers.DeleteUser)
+		protected.DELETE("/drop-products", handlers.DropProducts) // ✅
+		protected.DELETE("/drop-users", handlers.DropUsers)
+		protected.DELETE("/drop-cart", handlers.DropCart) // ✅
 	}
+
+	// Authorization
 	r.GET("/auth/:provider", middleware.BeginAuthProviderCallback)
 	r.GET("/auth/:provider/callback", middleware.GetAuthCallBackFunction)
 
