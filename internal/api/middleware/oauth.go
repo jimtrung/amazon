@@ -38,7 +38,7 @@ func NewAuth() {
 		google.New(
 			googleClientId,
 			googleClientSecret,
-			"http://127.0.0.1:8008/auth/oauth",
+			"http://127.0.0.1:8008/protected/oauth",
 		),
 	)
 }

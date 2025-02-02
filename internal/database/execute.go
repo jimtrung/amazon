@@ -1,4 +1,4 @@
-package sql
+package database
 
 import "github.com/jimtrung/amazon/internal/database/migrations"
 

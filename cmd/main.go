@@ -6,14 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jimtrung/amazon/internal/api/routes"
 	"github.com/jimtrung/amazon/internal/config"
-	sql "github.com/jimtrung/amazon/internal/database"
+	"github.com/jimtrung/amazon/internal/database"
 )
 
 func main() {
 	// Database setup
 	config.ConnectDB()
 
-	err := sql.SetupDatabase()
+	err := database.SetupDatabase()
 	if err != nil {
 		log.Fatal("Failed to set up database:", err)
 	}
