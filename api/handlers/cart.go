@@ -1,39 +1,21 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/jimtrung/amazon/config"
 	"github.com/jimtrung/amazon/internal/models"
+	"github.com/jimtrung/amazon/internal/services"
 )
 
 func GetCart(c *gin.Context) {
-	rows, err := config.DB.Query(context.Background(), "SELECT * FROM cart")
+	cart, err := services.GetAllCart()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
-	}
-	defer rows.Close()
-
-	var cart []models.CartItem
-	for rows.Next() {
-		var cartItem models.CartItem
-		err := rows.Scan(
-			&cartItem.ProductId,
-			&cartItem.Quantity,
-		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		cart = append(cart, cartItem)
 	}
 
 	c.JSON(http.StatusOK, cart)
@@ -48,12 +30,10 @@ func AddToCart(c *gin.Context) {
 		return
 	}
 
-	_, err := config.DB.Exec(
-		context.Background(),
-		"SELECT add_to_cart($1, $2);",
-		cartItem.ProductId, cartItem.Quantity,
-	)
-	if err != nil {
+	if err := services.AddToCart(
+		cartItem.ProductId,
+		cartItem.Quantity,
+	); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
@@ -72,53 +52,35 @@ func UpdateCart(c *gin.Context) {
 		return
 	}
 
-	_, err := config.DB.Exec(
-		context.Background(),
-		"SELECT update_cart($1, $2)",
-		cartItem.ProductId, cartItem.Quantity,
-	)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+    if err := services.UpdateCartItemQuantity(
+        cartItem.ProductId, cartItem.Quantity,
+    ); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+    }
 
 	c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
 
 func DeleteFromCart(c *gin.Context) {
 	productId := c.Param("product_id")
-	_, err := config.DB.Exec(
-		context.Background(),
-		"SELECT delete_from_cart($1)",
-		productId,
-	)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+
+    if err := services.DeleteFromCart(productId); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+    }
 
 	c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
 func DropCart(c *gin.Context) {
-	dropTable := `
-		DROP TABLE cart; 
-	`
-
-	_, err := config.DB.Exec(
-		context.Background(),
-		dropTable,
-	)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+    if err := services.DropCart(); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+    }
 
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }

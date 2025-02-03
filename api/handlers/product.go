@@ -1,62 +1,30 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jimtrung/amazon/config"
 	"github.com/jimtrung/amazon/internal/models"
+	"github.com/jimtrung/amazon/internal/services"
 )
 
 func GetProducts(c *gin.Context) {
-	rows, err := config.DB.Query(context.Background(), "SELECT * FROM products")
+	products, err := services.GetProducts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Database query failed: " + err.Error(),
+			"error": err.Error(),
 		})
 		return
-	}
-	defer rows.Close()
-
-	var products []models.Product
-	for rows.Next() {
-		var product models.Product
-		err := rows.Scan(
-			&product.Id,
-			&product.Name,
-			&product.Image,
-			&product.Rating.Stars,
-			&product.Rating.Count,
-			&product.PriceCents,
-			&product.Keywords,
-		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		products = append(products, product)
 	}
 
 	c.JSON(http.StatusOK, products)
 }
 
 func DropProducts(c *gin.Context) {
-	dropTable := `
-		DROP TABLE products;
-	`
-
-	_, err := config.DB.Exec(
-		context.Background(),
-		dropTable,
-	)
-	if err != nil {
+	if err := services.DropCart(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
-		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
@@ -72,20 +40,10 @@ func Transfer(c *gin.Context) {
 		return
 	}
 
-	for _, product := range products {
-		_, err := config.DB.Exec(
-			context.Background(),
-			"INSERT INTO products VALUES ($1, $2, $3, $4, $5, $6, $7)",
-			product.Id, product.Name, product.Image,
-			product.Rating.Stars, product.Rating.Count,
-			product.PriceCents, product.Keywords,
-		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
+	if err := services.Transfer(products); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Transfer successfully"})
