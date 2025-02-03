@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jimtrung/amazon/internal/config"
+	"github.com/jimtrung/amazon/config"
 )
 
 func BindDefaultCart() error {

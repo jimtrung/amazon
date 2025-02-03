@@ -1,6 +1,6 @@
 package database
 
-import "github.com/jimtrung/amazon/internal/database/migrations"
+import "github.com/jimtrung/amazon/migrations"
 
 func SetupDatabase() error {
 	// schema.go

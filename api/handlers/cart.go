@@ -5,8 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jimtrung/amazon/internal/api/models"
-	"github.com/jimtrung/amazon/internal/config"
+
+	"github.com/jimtrung/amazon/config"
+	"github.com/jimtrung/amazon/internal/models"
 )
 
 func GetCart(c *gin.Context) {
@@ -38,7 +39,6 @@ func GetCart(c *gin.Context) {
 	c.JSON(http.StatusOK, cart)
 }
 
-// Add item to cart
 func AddToCart(c *gin.Context) {
 	var cartItem models.CartItem
 	if err := c.Bind(&cartItem); err != nil {

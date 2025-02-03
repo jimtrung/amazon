@@ -9,8 +9,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jimtrung/amazon/internal/api/models"
-	"github.com/jimtrung/amazon/internal/config"
+	"github.com/jimtrung/amazon/config"
+	"github.com/jimtrung/amazon/internal/models"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
