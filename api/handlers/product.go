@@ -7,13 +7,14 @@ import (
 	"github.com/jimtrung/amazon/internal/logger"
 	"github.com/jimtrung/amazon/internal/models"
 	"github.com/jimtrung/amazon/internal/services"
+
 	"go.uber.org/zap"
 )
 
 func GetProducts(c *gin.Context) {
 	products, err := services.GetProducts()
 	if err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -84,7 +85,7 @@ func Transfer(c *gin.Context) {
 	var products []models.Product
 
 	if err := c.Bind(&products); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -103,7 +104,7 @@ func Transfer(c *gin.Context) {
 	}
 
 	if err := services.Transfer(products); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })

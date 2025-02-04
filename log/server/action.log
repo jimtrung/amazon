@@ -1,1 +1,5 @@
 {"level":"info","time":"2025-02-04T19:17:47.883+0700","caller":"handlers/cart.go:237","msg":"Table drop sucessfully","url":"/protected/drop-cart"}
+{"level":"info","time":"2025-02-04T19:39:28.021+0700","caller":"handlers/user.go:113","msg":"User added successfully","url":"/api/users/signup","username":"jimtrung"}
+{"level":"info","time":"2025-02-04T19:41:26.668+0700","caller":"handlers/user.go:184","msg":"Table dropped successfully","url":"/protected/drop-users"}
+{"level":"info","time":"2025-02-04T19:42:29.747+0700","caller":"handlers/user.go:114","msg":"User added successfully","url":"/api/users/signup","username":"jimtrung"}
+{"level":"info","time":"2025-02-04T19:43:01.628+0700","caller":"handlers/user.go:254","msg":"Login successfully","url":"/api/users/login","username":"jimtrung"}

@@ -14,7 +14,7 @@ import (
 func GetCart(c *gin.Context) {
 	cart, err := services.GetAllCart()
 	if err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -51,7 +51,7 @@ func GetCart(c *gin.Context) {
 func AddToCart(c *gin.Context) {
     var cartItem models.CartItem
 	if err := c.Bind(&cartItem); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -113,7 +113,7 @@ func AddToCart(c *gin.Context) {
 func UpdateCart(c *gin.Context) {
     var cartItem models.CartItem
     if err := c.Bind(&cartItem); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -134,7 +134,7 @@ func UpdateCart(c *gin.Context) {
     if err := services.UpdateCartItemQuantity(
         cartItem.ProductId, cartItem.Quantity,
     ); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })
@@ -174,7 +174,7 @@ func DeleteFromCart(c *gin.Context) {
 	productId := c.Param("product_id")
 
     if err := services.DeleteFromCart(productId); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
+        if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
                 "error": err.Error(),
             })

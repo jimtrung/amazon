@@ -1,0 +1,5 @@
+{"level":"error","time":"2025-02-04T19:39:28.012+0700","caller":"handlers/user.go:97","msg":"ERROR: null value in column \"status\" of relation \"users\" violates not-null constraint (SQLSTATE 23502)","url":"/api/users/signup"}
+{"level":"error","time":"2025-02-04T19:40:53.918+0700","caller":"handlers/user.go:97","msg":"ERROR: null value in column \"status\" of relation \"users\" violates not-null constraint (SQLSTATE 23502)","url":"/api/users/signup"}
+{"level":"error","time":"2025-02-04T19:41:29.176+0700","caller":"handlers/user.go:167","msg":"ERROR: table \"users\" does not exist (SQLSTATE 42P01)","url":"/protected/drop-users"}
+{"level":"error","time":"2025-02-04T19:42:44.822+0700","caller":"handlers/user.go:239","msg":"crypto/bcrypt: hashedPassword is not the hash of the given password","url":"/api/users/login"}
+{"level":"error","time":"2025-02-04T19:43:11.072+0700","caller":"handlers/user.go:97","msg":"ERROR: duplicate key value violates unique constraint \"unique_username\" (SQLSTATE 23505)","url":"/api/users/signup"}
