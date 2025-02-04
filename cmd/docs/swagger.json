@@ -1,0 +1,20 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This project is a practice for Go Backend knowledge",
+        "title": "Amazon",
+        "contact": {
+            "name": "jimtrung",
+            "email": "nguyenhaitrung737@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "host": "127.0.0.1:8080",
+    "basePath": "/api/v1",
+    "paths": {},
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}

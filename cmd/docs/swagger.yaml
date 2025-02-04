@@ -1,0 +1,14 @@
+basePath: /api/v1
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: nguyenhaitrung737@gmail.com
+    name: jimtrung
+  description: This project is a practice for Go Backend knowledge
+  title: Amazon
+  version: 1.0.0
+paths: {}
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

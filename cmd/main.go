@@ -11,6 +11,17 @@ import (
 	"github.com/jimtrung/amazon/internal/middleware"
 )
 
+//	@title			Amazon
+//	@version		1.0.0
+//	@description	This project is a practice for Go Backend knowledge
+//	@host			127.0.0.1:8080
+//	@BasePath		/api/v1
+
+//	@securityDefinitions.basic	BasicAuth
+
+//	@contact.name	jimtrung
+//	@contact.email	nguyenhaitrung737@gmail.com
+
 func main() {
 	// Oauth
 	middleware.NewAuth()
