@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/jimtrung/amazon/internal/logger"
 	"github.com/jimtrung/amazon/internal/models"
 	"github.com/jimtrung/amazon/internal/services"
 )
@@ -52,13 +53,13 @@ func UpdateCart(c *gin.Context) {
 		return
 	}
 
-    if err := services.UpdateCartItemQuantity(
-        cartItem.ProductId, cartItem.Quantity,
-    ); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-    }
+	if err := services.UpdateCartItemQuantity(
+		cartItem.ProductId, cartItem.Quantity,
+	); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
@@ -66,21 +67,19 @@ func UpdateCart(c *gin.Context) {
 func DeleteFromCart(c *gin.Context) {
 	productId := c.Param("product_id")
 
-    if err := services.DeleteFromCart(productId); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-    }
+	if err := services.DeleteFromCart(productId); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
 func DropCart(c *gin.Context) {
-    if err := services.DropCart(); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-    }
+	if err := services.DropCart(); err != nil {
+		logger.InitLogger(err.Error())
+	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }
