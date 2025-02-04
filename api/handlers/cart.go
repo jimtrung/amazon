@@ -14,7 +14,7 @@ import (
 // GetCart godoc
 //	@Summary		Show cart items
 //	@Description	Show all items in cart
-//	@Tags			cart
+//	@Tags			Cart
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{array}		models.CartItem		"List of cart items"
@@ -61,10 +61,10 @@ func GetCart(c *gin.Context) {
 // AddToCart godoc
 //	@Summary		Add item to cart
 //	@Description	Add a product to cart with  _ quantitys
-//	@Tags			cart
+//	@Tags			Cart
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Success		200	{object}	map[string]string	"Success messsage"
 //	@Failure		400	{object}	map[string]string	"Bad request error"
 //	@Failure		500	{object}	map[string]string	"Internal server error"
 //	@Router			/api/v1/cart/add [post]
@@ -133,10 +133,10 @@ func AddToCart(c *gin.Context) {
 // UpdateCart godoc
 //	@Summary		Update cart item
 //	@Description	Either change the quantity or delete item from cart
-//	@Tags			cart
+//	@Tags			Cart
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Success		200	{object}	map[string]string	"Success messsage"
 //	@Failure		400	{object}	map[string]string	"Bad request error"
 //	@Failure		500	{object}	map[string]string	"Internal server error"
 //	@Router			/api/v1/cart/update [patch]
@@ -202,11 +202,11 @@ func UpdateCart(c *gin.Context) {
 
 // DeleteFromCart godoc
 //	@Summary		Delete item
-//	@Description    Remove an item from cart
-//	@Tags			cart
+//	@Description	Remove an item from cart
+//	@Tags			Cart
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Success		200	{object}	map[string]string	"Success messsage"
 //	@Failure		400	{object}	map[string]string	"Bad request error"
 //	@Failure		500	{object}	map[string]string	"Internal server error"
 //	@Router			/api/v1/cart/delete/{productId} [delete]
@@ -250,11 +250,11 @@ func DeleteFromCart(c *gin.Context) {
 
 // DeleteFromCart godoc
 //	@Summary		Delete cart database
-//	@Description    Delete cart table from database
-//	@Tags			cart
+//	@Description	Delete cart table from database
+//	@Tags			Cart
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Success		200	{object}	map[string]string	"Success messsage"
 //	@Failure		400	{object}	map[string]string	"Bad request error"
 //	@Failure		500	{object}	map[string]string	"Internal server error"
 //	@Router			/protected/drop-cart [delete]

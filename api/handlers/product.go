@@ -11,6 +11,16 @@ import (
 	"go.uber.org/zap"
 )
 
+// GetProducts godoc
+//	@Summary		Show products
+//	@Description	Show all the products of the website
+//	@Tags			Product
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		models.Product		"List of products"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/product [get]
 func GetProducts(c *gin.Context) {
 	products, err := services.GetProducts()
 	if err != nil {
@@ -47,6 +57,16 @@ func GetProducts(c *gin.Context) {
     c.JSON(http.StatusOK, products)
 }
 
+// DropProducts godoc
+//	@Summary		Delete products table from database
+//	@Description	Remove table from database
+//	@Tags			Product
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/protected/drop-products [delete]
 func DropProducts(c *gin.Context) {
 	if err := services.DropProducts(); err != nil {
         if err := logger.InitLogger("server/error.log"); err != nil {
@@ -81,6 +101,16 @@ func DropProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }
 
+// Transfer godoc
+//	@Summary		Insert products to table
+//	@Description	Insert a JSON of products to table
+//	@Tags			Product
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/products/transfer [post]
 func Transfer(c *gin.Context) {
 	var products []models.Product
 

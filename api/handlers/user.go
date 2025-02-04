@@ -14,6 +14,16 @@ import (
 	"go.uber.org/zap"
 )
 
+// GetUsers godoc
+//	@Summary		Show all the users
+//	@Description	Show all the users and infos
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		models.User			"List of users"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/users [get]
 func GetUsers(c *gin.Context) {
 	users, err := services.GetUsers()
 	if err != nil {
@@ -50,6 +60,16 @@ func GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// Signup godoc
+//	@Summary		Create a new user
+//	@Description	Create a user if given info is valid
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/users/signup [post]
 func Signup(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
@@ -121,6 +141,16 @@ func Signup(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User added successfully"})
 }
 
+// DeleteUser godoc
+//	@Summary		Delete a user with a given id
+//	@Description	Delete user with id in the URL path
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/protected/delete/{user_id} [delete]
 func DeleteUser(c *gin.Context) {
 	userID := c.Param("user_id")
 
@@ -156,6 +186,16 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
+// DropUsers godoc
+//	@Summary		Drop users table
+//	@Description	Drop users table in the database
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/protected/drop-users [delete]
 func DropUsers(c *gin.Context) {
 	if err := services.DropUser(); err != nil {
         if err := logger.InitLogger("server/error.log"); err != nil {
@@ -190,6 +230,16 @@ func DropUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }
 
+// Login godoc
+//	@Summary		Login to an existed account
+//	@Description	Login to an account with validation
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/users/login [post]
 func Login(c *gin.Context) {
 	var user models.UserResponse
 	if err := c.Bind(&user); err != nil {

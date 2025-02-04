@@ -7,6 +7,59 @@ definitions:
       quantity:
         type: integer
     type: object
+  models.Product:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      keywords:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      priceCents:
+        type: integer
+      rating:
+        $ref: '#/definitions/models.Rating'
+    type: object
+  models.Rating:
+    properties:
+      count:
+        type: integer
+      stars:
+        type: number
+    type: object
+  models.Status:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - Active
+    - Inactive
+    - Banned
+    - Closed
+  models.User:
+    properties:
+      country:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      phone:
+        type: string
+      status:
+        $ref: '#/definitions/models.Status'
+      username:
+        type: string
+    type: object
 host: 127.0.0.1:8080
 info:
   contact:
@@ -132,6 +185,180 @@ paths:
       summary: Update cart item
       tags:
       - cart
+  /api/v1/product:
+    get:
+      consumes:
+      - application/json
+      description: Show all the products of the website
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of products
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show products
+      tags:
+      - product
+  /api/v1/products/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Insert a JSON of products to table
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Insert products to table
+      tags:
+      - product
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      description: Show all the users and infos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show all the users
+      tags:
+      - User
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to an account with validation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login to an existed account
+      tags:
+      - User
+  /api/v1/users/signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a user if given info is valid
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - User
+  /protected/delete/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user with id in the URL path
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a user with a given id
+      tags:
+      - User
   /protected/drop-cart:
     delete:
       consumes:
@@ -161,6 +388,64 @@ paths:
       summary: Delete cart database
       tags:
       - cart
+  /protected/drop-products:
+    delete:
+      consumes:
+      - application/json
+      description: Remove table from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete products table from database
+      tags:
+      - product
+  /protected/drop-users:
+    delete:
+      consumes:
+      - application/json
+      description: Drop users table in the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Drop users table
+      tags:
+      - User
 schemes:
 - http
 - https
