@@ -11,6 +11,16 @@ import (
 	"github.com/jimtrung/amazon/internal/services"
 )
 
+// GetCart godoc
+//	@Summary		Show cart items
+//	@Description	Show all items in cart
+//	@Tags			cart
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}		models.CartItem		"List of cart items"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/cart [get]
 func GetCart(c *gin.Context) {
 	cart, err := services.GetAllCart()
 	if err != nil {
@@ -48,6 +58,16 @@ func GetCart(c *gin.Context) {
     c.JSON(http.StatusOK, cart)
 }
 
+// AddToCart godoc
+//	@Summary		Add item to cart
+//	@Description	Add a product to cart with  _ quantitys
+//	@Tags			cart
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/cart/add [post]
 func AddToCart(c *gin.Context) {
     var cartItem models.CartItem
 	if err := c.Bind(&cartItem); err != nil {
@@ -110,6 +130,16 @@ func AddToCart(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Item added to cart"})
 }
 
+// UpdateCart godoc
+//	@Summary		Update cart item
+//	@Description	Either change the quantity or delete item from cart
+//	@Tags			cart
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/cart/update [patch]
 func UpdateCart(c *gin.Context) {
     var cartItem models.CartItem
     if err := c.Bind(&cartItem); err != nil {
@@ -170,6 +200,16 @@ func UpdateCart(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
 
+// DeleteFromCart godoc
+//	@Summary		Delete item
+//	@Description    Remove an item from cart
+//	@Tags			cart
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/api/v1/cart/delete/{productId} [delete]
 func DeleteFromCart(c *gin.Context) {
 	productId := c.Param("product_id")
 
@@ -208,6 +248,16 @@ func DeleteFromCart(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
+// DeleteFromCart godoc
+//	@Summary		Delete cart database
+//	@Description    Delete cart table from database
+//	@Tags			cart
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}    map[string]string   "Success messsage"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/protected/drop-cart [delete]
 func DropCart(c *gin.Context) {
     if err := services.DropCart(); err != nil {
         if err := logger.InitLogger("server/error.log"); err != nil {

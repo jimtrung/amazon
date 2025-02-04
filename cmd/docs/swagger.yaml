@@ -1,4 +1,12 @@
-basePath: /api/v1
+basePath: /api/v
+definitions:
+  models.CartItem:
+    properties:
+      productId:
+        type: string
+      quantity:
+        type: integer
+    type: object
 host: 127.0.0.1:8080
 info:
   contact:
@@ -7,7 +15,155 @@ info:
   description: This project is a practice for Go Backend knowledge
   title: Amazon
   version: 1.0.0
-paths: {}
+paths:
+  /api/v1/cart:
+    get:
+      consumes:
+      - application/json
+      description: Show all items in cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cart items
+          schema:
+            items:
+              $ref: '#/definitions/models.CartItem'
+            type: array
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show cart items
+      tags:
+      - cart
+  /api/v1/cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a product to cart with  _ quantitys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success messsage
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add item to cart
+      tags:
+      - cart
+  /api/v1/cart/delete/{productId}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove an item from cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success messsage
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete item
+      tags:
+      - cart
+  /api/v1/cart/update:
+    patch:
+      consumes:
+      - application/json
+      description: Either change the quantity or delete item from cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success messsage
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update cart item
+      tags:
+      - cart
+  /protected/drop-cart:
+    delete:
+      consumes:
+      - application/json
+      description: Delete cart table from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success messsage
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete cart database
+      tags:
+      - cart
+schemes:
+- http
+- https
 securityDefinitions:
   BasicAuth:
     type: basic
