@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 
 	"github.com/jimtrung/amazon/internal/logger"
 	"github.com/jimtrung/amazon/internal/models"
@@ -78,8 +79,35 @@ func DeleteFromCart(c *gin.Context) {
 
 func DropCart(c *gin.Context) {
 	if err := services.DropCart(); err != nil {
-		logger.InitLogger(err.Error())
-	}
+        if err := logger.InitLogger("server/error.log"); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{
+                "error": err.Error(),
+            })
+            return
+        }
+        logger.Logger.Error(
+            err.Error(),
+            zap.String("url", "http://127.0.0.1:8080/protected/drop-cart"),
+        )
+        defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+
+    if err := logger.InitLogger("server/action.log"); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+    logger.Logger.Warn(
+        "Table drop sucessfully",
+        zap.String("url", "http://127.0.0.1:8080/protected/drop-cart"),
+    )
+    defer logger.CloseLogger()
+
+    c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }
