@@ -235,7 +235,7 @@ func DropCart(c *gin.Context) {
         return
     }
     logger.Logger.Info(
-        "Table drop sucessfully",
+        "Table dropped sucessfully",
         zap.String("url", c.Request.URL.String()),
     )
     defer logger.CloseLogger()
