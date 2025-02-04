@@ -44,7 +44,7 @@ func AddToCart(productId string, quantity int) error {
 func UpdateCartItemQuantity(productId string, quantity int) error {
     _, err := config.DB.Exec(
         context.Background(),
-        "SELECT add_to_cart($1, $2);",
+        "SELECT update_cart($1, $2);",
         productId, quantity,
     )
     if err != nil {

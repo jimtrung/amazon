@@ -1,6 +1,0 @@
-{"level":"info","time":"2025-02-04T18:00:53.208+0700","caller":"handlers/cart.go:89","msg":"Failed to drop cart","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"info","time":"2025-02-04T18:08:36.847+0700","caller":"handlers/cart.go:89","msg":"Failed to drop cart","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"error","time":"2025-02-04T18:15:40.938+0700","caller":"handlers/cart.go:89","msg":"Failed to drop cart","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"error","time":"2025-02-04T18:21:47.430+0700","caller":"handlers/cart.go:89","msg":"Failed to drop cart","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"error","time":"2025-02-04T18:28:05.348+0700","caller":"handlers/cart.go:89","msg":"ERROR: table \"cart\" does not exist (SQLSTATE 42P01)","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"error","time":"2025-02-04T18:30:29.317+0700","caller":"handlers/cart.go:89","msg":"ERROR: table \"cart\" does not exist (SQLSTATE 42P01)","url":"http://127.0.0.1:8080/protected/drop-cart"}

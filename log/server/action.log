@@ -1,2 +1,0 @@
-{"level":"info","time":"2025-02-04T18:27:37.572+0700","caller":"handlers/cart.go:108","msg":"Table drop sucessfully","url":"http://127.0.0.1:8080/protected/drop-cart"}
-{"level":"warn","time":"2025-02-04T18:30:21.945+0700","caller":"handlers/cart.go:108","msg":"Table drop sucessfully","url":"http://127.0.0.1:8080/protected/drop-cart"}
