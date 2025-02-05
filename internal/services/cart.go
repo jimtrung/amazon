@@ -35,10 +35,8 @@ func AddToCart(productId string, quantity int) error {
 		"SELECT add_to_cart($1, $2);",
 		productId, quantity,
 	)
-	if err != nil {
-		return err
-	}
-	return nil
+
+    return err
 }
 
 func UpdateCartItemQuantity(productId string, quantity int) error {
@@ -47,10 +45,8 @@ func UpdateCartItemQuantity(productId string, quantity int) error {
         "SELECT update_cart($1, $2);",
         productId, quantity,
     )
-    if err != nil {
-        return err
-    }
-    return nil
+
+    return err
 }
 
 func DeleteFromCart(productId string) error {
@@ -59,10 +55,8 @@ func DeleteFromCart(productId string) error {
 		"SELECT delete_from_cart($1)",
 		productId,
 	)
-	if err != nil {
-        return err
-	}
-    return nil
+
+    return err
 }
 
 func DropCart() error {
@@ -74,8 +68,6 @@ func DropCart() error {
 		context.Background(),
 		dropTable,
 	)
-	if err != nil {
-        return err
-	}
-    return nil
+
+    return err
 }

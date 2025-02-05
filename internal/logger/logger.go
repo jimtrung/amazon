@@ -2,7 +2,9 @@ package logger
 
 import (
 	"errors"
+    "net/http"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -50,4 +52,39 @@ func CustomConfig(filePath string) zap.Config {
         },
     }
     return config
+}
+
+func LogAndRespond(
+    c *gin.Context, logFile string, message string, erro error, statusCode int,
+    data ...interface{},
+) {
+    if err := InitLogger(logFile); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": err.Error(),
+        })
+        return
+    }
+    defer CloseLogger()
+
+    if erro != nil {
+        Logger.Error(
+            message,
+            zap.String("error", erro.Error()),
+            zap.String("url", c.Request.URL.String()),
+        )
+        c.JSON(statusCode, gin.H{"error": message})
+        return
+    }
+
+    Logger.Info(
+        message,
+        zap.Any("data", data),
+        zap.String("url", c.Request.URL.String()),
+    )
+
+    if data != nil {
+        c.JSON(statusCode, data)
+    } else {
+        c.JSON(statusCode, message)
+    }
 }

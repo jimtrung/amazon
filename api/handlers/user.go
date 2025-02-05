@@ -11,7 +11,6 @@ import (
 	"github.com/jimtrung/amazon/internal/logger"
 
 	"golang.org/x/crypto/bcrypt"
-	"go.uber.org/zap"
 )
 
 // GetUsers godoc
@@ -27,37 +26,17 @@ import (
 func GetUsers(c *gin.Context) {
 	users, err := services.GetUsers()
 	if err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to get users from database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
-    }
-    logger.Logger.Info(
-        "Successfully get users",
-        zap.String("url", c.Request.URL.String()),
-        zap.Any("users", users),
-    )
-    defer logger.CloseLogger()
+	}
 
-	c.JSON(http.StatusOK, users)
+    logger.LogAndRespond(
+        c, "server/action.log", "Successfully get users",
+        nil, http.StatusOK, users,
+    )
 }
 
 // Signup godoc
@@ -73,72 +52,34 @@ func GetUsers(c *gin.Context) {
 func Signup(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Wrong JSON format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
-		return
+        return
 	}
 
 	username, hash, err := services.IsValidUser(user)
 	if err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "client/error.log", "Invalid user format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+        return
 	}
 
 	if err := services.AddUser(username, hash, user); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to add user to database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
         return
 	}
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "User added successfully",
-        zap.String("url", c.Request.URL.String()),
-        zap.String("username", username),
-    )
-    defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "User added successfully"})
+    logger.LogAndRespond(
+        c, "client/action.log", "User created successfully",
+        nil, http.StatusOK,
+    )
 }
 
 // DeleteUser godoc
@@ -155,79 +96,17 @@ func DeleteUser(c *gin.Context) {
 	userID := c.Param("user_id")
 
 	if err := services.DeleteUser(userID); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-            zap.String("user_id", userID),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to delete user from database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
-    }
-    logger.Logger.Info(
-        "User deleted successfully",
-        zap.String("url", c.Request.URL.String()),
-    )
-    defer logger.CloseLogger()
-
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
-}
-
-// DropUsers godoc
-//	@Summary		Drop users table
-//	@Description	Drop users table in the database
-//	@Tags			User
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{object}	map[string]string	"Success message"
-//	@Failure		400	{object}	map[string]string	"Bad request error"
-//	@Failure		500	{object}	map[string]string	"Internal server error"
-//	@Router			/protected/drop-users [delete]
-func DropUsers(c *gin.Context) {
-	if err := services.DropUser(); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-        )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
 	}
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Table dropped successfully",
-        zap.String("url", c.Request.URL.String()),
-    )
-    defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
+    logger.LogAndRespond(
+        c, "client/action.log", "User deleted successfully",
+        nil, http.StatusOK,
+    )
 }
 
 // Login godoc
@@ -243,21 +122,10 @@ func DropUsers(c *gin.Context) {
 func Login(c *gin.Context) {
 	var user models.UserResponse
 	if err := c.Bind(&user); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Wrong JSON format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
         return
 	}
 
@@ -270,43 +138,52 @@ func Login(c *gin.Context) {
 	var hashedPassword string
 	err := row.Scan(&hashedPassword)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Database error",
-		})
-		return
+        logger.LogAndRespond(
+            c, "client/error.log", "No user found",
+            err, http.StatusBadRequest,
+        )
+        return
 	}
 
 	if err := bcrypt.CompareHashAndPassword(
 		[]byte(hashedPassword),
 		[]byte(user.Password),
 	); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "client/action.log", "Wrong password",
+            err, http.StatusOK, user.Username,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
     }
-    logger.Logger.Info(
-        "Login successfully",
-        zap.String("url", c.Request.URL.String()),
-        zap.String("username", user.Username),
-    )
-    defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successfully"})
+    logger.LogAndRespond(
+        c, "client/action.log", "Login successfully",
+        err, http.StatusOK,
+    )
 }
+
+// DropUsers godoc
+//	@Summary		Drop users table
+//	@Description	Drop users table in the database
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"Success message"
+//	@Failure		400	{object}	map[string]string	"Bad request error"
+//	@Failure		500	{object}	map[string]string	"Internal server error"
+//	@Router			/protected/drop-users [delete]
+func DropUsers(c *gin.Context) {
+    if err := services.DropUser(); err != nil {
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to drop table",
+            err, http.StatusInternalServerError,
+        )
+        return
+    }
+
+    logger.LogAndRespond(
+        c, "server/action.log", "Table dropped successfully",
+        nil, http.StatusOK,
+    )
+}
+

@@ -7,8 +7,6 @@ import (
 	"github.com/jimtrung/amazon/internal/logger"
 	"github.com/jimtrung/amazon/internal/models"
 	"github.com/jimtrung/amazon/internal/services"
-
-	"go.uber.org/zap"
 )
 
 // GetProducts godoc
@@ -24,37 +22,17 @@ import (
 func GetProducts(c *gin.Context) {
 	products, err := services.GetProducts()
 	if err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to get products from database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
-    }
-    logger.Logger.Info(
-        "Successfully get products",
-        zap.String("url", c.Request.URL.String()),
-        zap.Any("products", products),
-    )
-    defer logger.CloseLogger()
+	}
 
-    c.JSON(http.StatusOK, products)
+    logger.LogAndRespond(
+        c, "server/action.log", "Successfully get products",
+        nil, http.StatusOK, products,
+    )
 }
 
 // DropProducts godoc
@@ -69,36 +47,17 @@ func GetProducts(c *gin.Context) {
 //	@Router			/protected/drop-products [delete]
 func DropProducts(c *gin.Context) {
 	if err := services.DropProducts(); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to drop table",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
         return
 	}
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Table dropped successfully",
-        zap.String("url", c.Request.URL.String()),
-    )
-    defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
+    logger.LogAndRespond(
+        c, "server/action.log", "Table dropped successfully",
+        nil, http.StatusOK,
+    )
 }
 
 // Transfer godoc
@@ -115,54 +74,23 @@ func Transfer(c *gin.Context) {
 	var products []models.Product
 
 	if err := c.Bind(&products); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Wrong JSON format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+        return
 	}
 
 	if err := services.Transfer(products); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-            zap.Any("products", products),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to transfer products to database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
         return
 	}
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Successfully get products",
-        zap.String("url", c.Request.URL.String()),
-    )
-    defer logger.CloseLogger()
 
-	c.JSON(http.StatusOK, gin.H{"message": "Transfer successfully"})
+    logger.LogAndRespond(
+        c, "server/action.log", "Products data transfered successfully",
+        nil, http.StatusOK,
+    )
 }

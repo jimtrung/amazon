@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 
 	"github.com/jimtrung/amazon/internal/logger"
 	"github.com/jimtrung/amazon/internal/models"
@@ -24,38 +23,17 @@ import (
 func GetCart(c *gin.Context) {
 	cart, err := services.GetAllCart()
 	if err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to get cart from database",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
     }
-    logger.Logger.Info(
-        "Successfully get products",
-        zap.Any("cart", cart),
-        zap.String("url", c.Request.URL.String()),
-    )
-    defer logger.CloseLogger()
 
-    c.JSON(http.StatusOK, cart)
+    logger.LogAndRespond(
+        c, "server/action.log", "Successfully get cart",
+        nil, http.StatusOK, cart,
+    )
 }
 
 // AddToCart godoc
@@ -71,64 +49,29 @@ func GetCart(c *gin.Context) {
 func AddToCart(c *gin.Context) {
     var cartItem models.CartItem
 
-	if err := c.Bind(&cartItem); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+    if err := c.Bind(&cartItem); err != nil {
+        logger.LogAndRespond(
+            c, "server/error.log", "Wrong JSON format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+        return
 	}
 
 	if err := services.AddToCart(
 		cartItem.ProductId,
 		cartItem.Quantity,
-	); err != nil {
-        if err := logger.InitLogger("client/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-            zap.String("product_id", cartItem.ProductId),
-            zap.Int("quantity", cartItem.Quantity),
+    ); err != nil {
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to add item cart",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
+        return
 	}
 
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Item added to cart",
-        zap.String("url", c.Request.URL.String()),
-        zap.String("product_id", cartItem.ProductId),
-        zap.Int("quantity", cartItem.Quantity),
+    logger.LogAndRespond(
+        c, "client/action.log", "Item added to cart",
+        nil, http.StatusOK, cartItem,
     )
-    defer logger.CloseLogger()
-
-    c.JSON(http.StatusOK, gin.H{"message": "Item added to cart"})
 }
 
 // UpdateCart godoc
@@ -144,61 +87,27 @@ func AddToCart(c *gin.Context) {
 func UpdateCart(c *gin.Context) {
     var cartItem models.CartItem
     if err := c.Bind(&cartItem); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Wrong JSON format",
+            err, http.StatusBadRequest,
         )
-        defer logger.CloseLogger()
-
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": err.Error(),
-        })
         return
     }
 
     if err := services.UpdateCartItemQuantity(
         cartItem.ProductId, cartItem.Quantity,
     ); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Info(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-            zap.String("product_id", cartItem.ProductId),
-            zap.Int("quantity", cartItem.Quantity),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to update item quantity",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
+        return
+    }
 
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Cart updated",
-        zap.String("url", c.Request.URL.String()),
-        zap.String("product_id", cartItem.ProductId),
-        zap.Int("quantity", cartItem.Quantity),
+    logger.LogAndRespond(
+        c, "client/action.log", "Item quantity updated successfully",
+        nil, http.StatusOK, cartItem,
     )
-    defer logger.CloseLogger()
-
-    c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
 
 // DeleteFromCart godoc
@@ -215,38 +124,16 @@ func DeleteFromCart(c *gin.Context) {
 	productId := c.Param("product_id")
 
     if err := services.DeleteFromCart(productId); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
-            zap.String("product_id", productId),
+        logger.LogAndRespond(
+            c, "server/error.log", "product_id not found",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-        c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
         return
     }
-    if err := logger.InitLogger("client/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Item deleted from cart",
-        zap.String("url", c.Request.URL.String()),
-        zap.String("product_id", productId),
+    logger.LogAndRespond(
+        c, "client/action.log", "Item deleted successfully",
+        nil, http.StatusOK, productId,
     )
-    defer logger.CloseLogger()
-
-    c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
 // DeleteFromCart godoc
@@ -261,35 +148,15 @@ func DeleteFromCart(c *gin.Context) {
 //	@Router			/protected/drop-cart [delete]
 func DropCart(c *gin.Context) {
     if err := services.DropCart(); err != nil {
-        if err := logger.InitLogger("server/error.log"); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{
-                "error": err.Error(),
-            })
-            return
-        }
-        logger.Logger.Error(
-            err.Error(),
-            zap.String("url", c.Request.URL.String()),
+        logger.LogAndRespond(
+            c, "server/error.log", "Failed to drop table",
+            err, http.StatusInternalServerError,
         )
-        defer logger.CloseLogger()
-
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
         return
     }
 
-    if err := logger.InitLogger("server/action.log"); err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": err.Error(),
-        })
-        return
-    }
-    logger.Logger.Info(
-        "Table dropped sucessfully",
-        zap.String("url", c.Request.URL.String()),
+    logger.LogAndRespond(
+        c, "server/action.log", "Table dropped successfully",
+        nil, http.StatusOK,
     )
-    defer logger.CloseLogger()
-
-    c.JSON(http.StatusOK, gin.H{"message": "Table dropped successfully"})
 }

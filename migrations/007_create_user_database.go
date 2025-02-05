@@ -16,12 +16,12 @@ func CreateTableUser() error {
 			email    VARCHAR(255),
 			phone    VARCHAR(255),
 			country  VARCHAR(255),
-			status   VARCHAR(255),
 			PRIMARY KEY (id, username),
 			CONSTRAINT unique_id UNIQUE (id),
     		CONSTRAINT unique_username UNIQUE (username)
 		);
 	`
+	//status   VARCHAR(255),
 
 	_, err := config.DB.Exec(
 		context.Background(),

@@ -58,16 +58,14 @@ func IsValidUser(user models.User) (string, []byte, error) {
 func AddUser(username string, hash []byte, user models.User) error {
 	_, err := config.DB.Exec(
 		context.Background(),
-		`INSERT INTO users (username, password, email, phone, country) 
+		`INSERT INTO users (username, password, email, phone, country)
 		VALUES ($1, $2, $3, $4, $5)`,
 		username, hash,
 		user.Email, user.Phone,
 		user.Country,
 	)
-	if err != nil {
-		return err
-	}
-	return nil
+
+    return err
 }
 
 func DeleteUser(userID string) error {
@@ -76,25 +74,21 @@ func DeleteUser(userID string) error {
 		`DELETE FROM users WHERE id = $1`,
 		userID,
 	)
-	if err != nil {
-		return err
-	}
-	return nil
+
+    return err
 }
 
 func DropUser() error {
 	dropTable := `
-		DROP TABLE users; 
+		DROP TABLE users;
 	`
 
 	_, err := config.DB.Exec(
 		context.Background(),
 		dropTable,
 	)
-	if err != nil {
-		return err
-	}
-	return nil
+
+    return err
 }
 
 func IsValidUsername(rawUsername string) (string, error) {
@@ -115,8 +109,8 @@ func IsValidPassword(password string) error {
 	re := regexp.MustCompile(passwordRegex)
 
 	if !re.MatchString(password) {
-		return errors.New(`password must be between 8 and 64 characters and 
-include at least one uppercase letter, one lowercase letter, one number, and 
+		return errors.New(`password must be between 8 and 64 characters and
+include at least one uppercase letter, one lowercase letter, one number, and
 one special character`)
 	}
 
