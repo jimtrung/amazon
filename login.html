@@ -1,83 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login/Sign Up</title>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 18px;
-      color: white;
-      background-color: black;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login/Sign Up</title>
+        <style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: white;
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
     .login-container {
-      border: 2px solid white;
-      border-radius: 10px;
-      padding: 30px;
-      width: 300px;
+        border: 2px solid white;
+        border-radius: 10px;
+        padding: 30px;
+        width: 300px;
     }
 
     .password-input {
-      margin-left: 4px;
+        margin-left: 4px;
     }
 
     .login-button-container {
-      margin-left: 120px;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="login-container">
-    <div style="margin-bottom: 10px;">
-      <label for="username">Username: </label>
-      <input id="username" class="username-input" type="text">
-    </div>
-    
-    <div>
-      <label for="password">Password: </label>
-      <input id="password" class="password-input" type="password">
-    </div>
-
-    <div class="login-button-container">
-      <button class="login-button">Login</button>
-    </div>
-    <div>
-      <button onclick="loginWithGoogle()">Login With Google</button>
-    </div>
-  </div>
-  
-  <script>
-    function loginWithGoogle() {
-      window.location.href = "http://127.0.0.1:8080/auth/google"
+        margin-left: 120px;
+        margin-top: 20px;
     }
 
-    document.querySelector('.login-button')
-      .addEventListener('click', async() => {
-        const username = document.querySelector('.username-input').value;
-        const password = document.querySelector('.password-input').value;
+    .login-google-button-container {
+        margin-top: 10px;
+        margin-left: 80px;
+    }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div style="margin-bottom: 10px;">
+                <label for="username">Username: </label>
+                <input id="username" class="username-input" type="text">
+            </div>
 
-        combinedString = `${username}:${password}`;
-        encodedString = btoa(combinedString);
+            <div>
+                <label for="password">Password: </label>
+                <input id="password" class="password-input" type="password">
+            </div>
 
-        fetch("http://127.0.0.1:8080/protected/auth", {
-          method: 'POST', 
-          headers: {
-            'Authorization': `Basic ${encodedString}`,
-          },
-        })
-        .then(response => response.json())
-        .then(console.log)
-        .catch(console.error);
-    });
-  </script>
-</body>
+            <div class="login-button-container">
+                <button class="login-button">Login</button>
+            </div>
+            <div class="login-google-button-container">
+                <button onclick="loginWithGoogle()">Login With Google</button>
+            </div>
+        </div>
+
+        <script>
+            function loginWithGoogle() {
+                window.location.href = "http://127.0.0.1:8080/auth/google"
+            }
+
+            document.querySelector('.login-button')
+                .addEventListener('click', async() => {
+                    const username = document.querySelector('.username-input').value;
+                    const password = document.querySelector('.password-input').value;
+
+                    combinedString = `${username}:${password}`;
+                    encodedString = btoa(combinedString);
+
+                    fetch("http://127.0.0.1:8080/protected/auth", {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Basic ${encodedString}`,
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(console.log)
+                        .catch(console.error);
+                });
+        </script>
+    </body>
 </html>

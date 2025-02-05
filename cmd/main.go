@@ -15,7 +15,7 @@ import (
 //	@version					1.0.0
 //	@description				This project is a practice for Go Backend knowledge
 //	@host						127.0.0.1:8080
-//	@BasePath					/api/v
+//	@BasePath					/api
 //	@schemes					http https
 //	@securityDefinitions.basic	BasicAuth
 //	@contact.name				jimtrung

@@ -70,6 +70,7 @@ func GetCart(c *gin.Context) {
 //	@Router			/api/v1/cart/add [post]
 func AddToCart(c *gin.Context) {
     var cartItem models.CartItem
+
 	if err := c.Bind(&cartItem); err != nil {
         if err := logger.InitLogger("server/error.log"); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{
