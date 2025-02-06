@@ -1,13 +1,10 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/jimtrung/amazon/api/routes"
 	"github.com/jimtrung/amazon/config"
-	"github.com/jimtrung/amazon/internal/database"
 	"github.com/jimtrung/amazon/internal/middleware"
 )
 
@@ -27,10 +24,6 @@ func main() {
 
 	// Database setup
 	config.ConnectDB()
-	err := database.SetupDatabase()
-	if err != nil {
-		log.Fatal("Failed to set up database:", err)
-	}
 
 	// Config the server
 	gin.SetMode(gin.ReleaseMode)

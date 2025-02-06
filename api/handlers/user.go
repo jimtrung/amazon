@@ -151,7 +151,7 @@ func Login(c *gin.Context) {
 	); err != nil {
         logger.LogAndRespond(
             c, "client/action.log", "Wrong password",
-            err, http.StatusOK, user.Username,
+            nil, http.StatusOK, user.Username,
         )
         return
     }
