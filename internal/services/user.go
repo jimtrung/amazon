@@ -22,12 +22,10 @@ func GetUsers() ([]models.User, error) {
 	for rows.Next() {
 		var user models.User
 		err := rows.Scan(
-			&user.Id,
-			&user.Username,
-			&user.Password,
-			&user.Email,
-			&user.Phone,
-			&user.Country,
+			&user.Id, &user.Username,
+			&user.Password, &user.Email,
+			&user.Phone, &user.Country,
+			&user.CreatedAt, &user.UpdatedAt,
 		)
 		if err != nil {
 			return []models.User{}, err
@@ -65,7 +63,7 @@ func AddUser(username string, hash []byte, user models.User) error {
 		user.Country,
 	)
 
-    return err
+	return err
 }
 
 func DeleteUser(userID string) error {
@@ -75,20 +73,7 @@ func DeleteUser(userID string) error {
 		userID,
 	)
 
-    return err
-}
-
-func DropUser() error {
-	dropTable := `
-		DROP TABLE users;
-	`
-
-	_, err := config.DB.Exec(
-		context.Background(),
-		dropTable,
-	)
-
-    return err
+	return err
 }
 
 func IsValidUsername(rawUsername string) (string, error) {

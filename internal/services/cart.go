@@ -2,13 +2,14 @@ package services
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/jimtrung/amazon/config"
 	"github.com/jimtrung/amazon/internal/models"
 )
 
-func GetAllCart() ([]models.CartItem, error) {
-	rows, err := config.DB.Query(context.Background(), "SELECT * FROM cart")
+func GetAllCarts() ([]models.CartItem, error) {
+	rows, err := config.DB.Query(context.Background(), "SELECT * FROM carts")
 	if err != nil {
 		return []models.CartItem{}, err
 	}
@@ -18,8 +19,11 @@ func GetAllCart() ([]models.CartItem, error) {
 	for rows.Next() {
 		var cartItem models.CartItem
 		err := rows.Scan(
+			&cartItem.CartItemId,
+			&cartItem.CartId,
 			&cartItem.ProductId,
 			&cartItem.Quantity,
+			&cartItem.AddedAt,
 		)
 		if err != nil {
 			return []models.CartItem{}, err
@@ -29,45 +33,36 @@ func GetAllCart() ([]models.CartItem, error) {
 	return cart, nil
 }
 
-func AddToCart(productId string, quantity int) error {
+func AddToCart(cartId int, productId string, quantity int) error {
 	_, err := config.DB.Exec(
 		context.Background(),
-		"SELECT add_to_cart($1, $2);",
-		productId, quantity,
+		"SELECT add_to_cart($1, $2, $3);",
+		cartId, productId, quantity,
 	)
 
-    return err
+	return err
 }
 
-func UpdateCartItemQuantity(productId string, quantity int) error {
-    _, err := config.DB.Exec(
-        context.Background(),
-        "SELECT update_cart($1, $2);",
-        productId, quantity,
-    )
-
-    return err
-}
-
-func DeleteFromCart(productId string) error {
+func UpdateCartItemQuantity(cartId int, productId string, quantity int) error {
 	_, err := config.DB.Exec(
 		context.Background(),
-		"SELECT delete_from_cart($1)",
-		productId,
+		"SELECT update_cart($1, $2, $3);",
+		cartId, productId, quantity,
 	)
 
-    return err
+	return err
 }
 
-func DropCart() error {
-	dropTable := `
-		DROP TABLE cart;
-	`
-
+func DeleteFromCart(cartId int, productId string) error {
 	_, err := config.DB.Exec(
 		context.Background(),
-		dropTable,
+		"SELECT delete_from_cart($1, $2)",
+		cartId, productId,
 	)
 
-    return err
+	return err
+}
+
+func StringToInt(str string) (int, error) {
+	return strconv.Atoi(str)
 }

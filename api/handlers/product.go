@@ -10,6 +10,7 @@ import (
 )
 
 // GetProducts godoc
+//
 //	@Summary		Show products
 //	@Description	Show all the products of the website
 //	@Tags			Product
@@ -22,45 +23,21 @@ import (
 func GetProducts(c *gin.Context) {
 	products, err := services.GetProducts()
 	if err != nil {
-        logger.LogAndRespond(
-            c, "server/error.log", "Failed to get products from database",
-            err, http.StatusInternalServerError,
-        )
-        return
+		logger.LogAndRespond(
+			c, "server/error.log", "Failed to get products from database",
+			err, http.StatusInternalServerError,
+		)
+		return
 	}
 
-    logger.LogAndRespond(
-        c, "server/action.log", "Successfully get products",
-        nil, http.StatusOK, products,
-    )
-}
-
-// DropProducts godoc
-//	@Summary		Delete products table from database
-//	@Description	Remove table from database
-//	@Tags			Product
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{object}	map[string]string	"Success message"
-//	@Failure		400	{object}	map[string]string	"Bad request error"
-//	@Failure		500	{object}	map[string]string	"Internal server error"
-//	@Router			/protected/drop-products [delete]
-func DropProducts(c *gin.Context) {
-	if err := services.DropProducts(); err != nil {
-        logger.LogAndRespond(
-            c, "server/error.log", "Failed to drop table",
-            err, http.StatusInternalServerError,
-        )
-        return
-	}
-
-    logger.LogAndRespond(
-        c, "server/action.log", "Table dropped successfully",
-        nil, http.StatusOK,
-    )
+	logger.LogAndRespond(
+		c, "server/action.log", "Successfully get products",
+		nil, http.StatusOK, products,
+	)
 }
 
 // Transfer godoc
+//
 //	@Summary		Insert products to table
 //	@Description	Insert a JSON of products to table
 //	@Tags			Product
@@ -74,23 +51,23 @@ func Transfer(c *gin.Context) {
 	var products []models.Product
 
 	if err := c.Bind(&products); err != nil {
-        logger.LogAndRespond(
-            c, "server/error.log", "Wrong JSON format",
-            err, http.StatusBadRequest,
-        )
-        return
+		logger.LogAndRespond(
+			c, "server/error.log", "Wrong JSON format",
+			err, http.StatusBadRequest,
+		)
+		return
 	}
 
 	if err := services.Transfer(products); err != nil {
-        logger.LogAndRespond(
-            c, "server/error.log", "Failed to transfer products to database",
-            err, http.StatusInternalServerError,
-        )
-        return
+		logger.LogAndRespond(
+			c, "server/error.log", "Failed to transfer products to database",
+			err, http.StatusInternalServerError,
+		)
+		return
 	}
 
-    logger.LogAndRespond(
-        c, "server/action.log", "Products data transfered successfully",
-        nil, http.StatusOK,
-    )
+	logger.LogAndRespond(
+		c, "server/action.log", "Products data transfered successfully",
+		nil, http.StatusOK,
+	)
 }

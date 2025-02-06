@@ -18,13 +18,10 @@ func GetProducts() ([]models.Product, error) {
 	for rows.Next() {
 		var product models.Product
 		err := rows.Scan(
-			&product.Id,
-			&product.Name,
-			&product.Image,
-			&product.Rating.Stars,
-			&product.Rating.Count,
-			&product.PriceCents,
-			&product.Keywords,
+			&product.Id, &product.Name, &product.Image,
+			&product.Rating.Stars, &product.Rating.Count,
+			&product.PriceCents, &product.Keywords,
+			&product.CreatedAt, &product.UpdatedAt,
 		)
 		if err != nil {
 			return []models.Product{}, err
@@ -32,21 +29,6 @@ func GetProducts() ([]models.Product, error) {
 		products = append(products, product)
 	}
 	return products, nil
-}
-
-func DropProducts() error {
-	dropTable := `
-		DROP TABLE products;
-	`
-
-	_, err := config.DB.Exec(
-		context.Background(),
-		dropTable,
-	)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func Transfer(products []models.Product) error {
