@@ -12,7 +12,18 @@ type Cart struct {
 type CartItem struct {
 	CartItemId int
 	CartId     int        `json:"cart_id"`
-	ProductId  string     `json:"productId"`
+	ProductId  string     `json:"product_id"`
 	Quantity   int        `json:"quantity"`
 	AddedAt    *time.Time `json:"added_at"`
+}
+
+type CartWithItems struct {
+	CartItemId    int       `json:"cart_item_id"`
+	CartId        int       `json:"cart_id"`
+	ProductId     string    `json:"product_id"`
+	Quantity      int       `json:"quantity"`
+	AddedAt       time.Time `json:"added_at"`
+	UserId        int       `json:"user_id"`
+	CartCreatedAt time.Time `json:"cart_created_at"`
+	CartUpdatedAt time.Time `json:"cart_updated_at"`
 }

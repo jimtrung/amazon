@@ -20,11 +20,11 @@ func SetupRoutes(r *gin.Engine) {
 	products.POST("/transfer", handlers.Transfer) // ✅
 
 	// Cart
-	cart := api.Group("/cart")
-	cart.GET("/", handlers.GetCart)                             // ✅
-	cart.POST("/add", handlers.AddToCart)                       // ✅
-	cart.PATCH("/update", handlers.UpdateCart)                  // ✅
-	cart.DELETE("/delete/:product_id", handlers.DeleteFromCart) // ✅
+	cart := api.Group("/carts")
+	cart.GET("/", handlers.GetCart)                                      // ✅
+	cart.POST("/add", handlers.AddToCart)                                // ✅
+	cart.PATCH("/update", handlers.UpdateCart)                           // ✅
+	cart.DELETE("/delete/:cart_id/:product_id", handlers.DeleteFromCart) // ✅
 
 	//User
 	users := api.Group("/users")

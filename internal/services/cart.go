@@ -8,29 +8,40 @@ import (
 	"github.com/jimtrung/amazon/internal/models"
 )
 
-func GetAllCarts() ([]models.CartItem, error) {
-	rows, err := config.DB.Query(context.Background(), "SELECT * FROM carts")
+func GetAllCarts() ([]models.CartWithItems, error) {
+	query := `
+		SELECT 
+			ci.cart_item_id, ci.cart_id, ci.product_id, ci.quantity, ci.added_at,
+			c.user_id, c.created_at, c.updated_at
+		FROM cart_items ci
+		JOIN carts c ON ci.cart_id = c.cart_id
+	`
+
+	rows, err := config.DB.Query(context.Background(), query)
 	if err != nil {
-		return []models.CartItem{}, err
+		return nil, err
 	}
 	defer rows.Close()
 
-	var cart []models.CartItem
+	var cartItems []models.CartWithItems
 	for rows.Next() {
-		var cartItem models.CartItem
+		var cartItem models.CartWithItems
 		err := rows.Scan(
 			&cartItem.CartItemId,
 			&cartItem.CartId,
 			&cartItem.ProductId,
 			&cartItem.Quantity,
 			&cartItem.AddedAt,
+			&cartItem.UserId,        // From carts table
+			&cartItem.CartCreatedAt, // From carts table
+			&cartItem.CartUpdatedAt, // From carts table
 		)
 		if err != nil {
-			return []models.CartItem{}, err
+			return nil, err
 		}
-		cart = append(cart, cartItem)
+		cartItems = append(cartItems, cartItem)
 	}
-	return cart, nil
+	return cartItems, nil
 }
 
 func AddToCart(cartId int, productId string, quantity int) error {

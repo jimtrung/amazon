@@ -15,3 +15,10 @@
 {"level":"info","time":"2025-02-05T17:26:43.884+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":["jimtrung"],"url":"/api/users/signup"}
 {"level":"error","time":"2025-02-05T17:26:58.862+0700","caller":"logger/logger.go:70","msg":"Wrong password","error":"crypto/bcrypt: hashedPassword is not the hash of the given password","url":"/api/users/login"}
 {"level":"info","time":"2025-02-05T17:27:06.209+0700","caller":"logger/logger.go:79","msg":"Login successfully","data":["jimtrung"],"url":"/api/users/login"}
+{"level":"info","time":"2025-02-06T16:34:30.987+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:40:54.420+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:41:46.118+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:45:45.907+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:50:57.963+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:52:12.407+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T16:53:29.050+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
