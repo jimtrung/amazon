@@ -10,7 +10,7 @@ type Cart struct {
 }
 
 type CartItem struct {
-	CartItemId int
+	CartItemId int        `json:"cart_item_id"`
 	CartId     int        `json:"cart_id"`
 	ProductId  string     `json:"product_id"`
 	Quantity   int        `json:"quantity"`

@@ -22,3 +22,7 @@
 {"level":"info","time":"2025-02-06T16:50:57.963+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
 {"level":"info","time":"2025-02-06T16:52:12.407+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
 {"level":"info","time":"2025-02-06T16:53:29.050+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T20:39:48.490+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T20:47:52.601+0700","caller":"logger/logger.go:79","msg":"User created successfully","data":null,"url":"/api/users/signup"}
+{"level":"info","time":"2025-02-06T20:52:53.462+0700","caller":"logger/logger.go:79","msg":"Item added to cart","data":[{"cart_item_id":0,"cart_id":1,"product_id":"e43638ce-6aa0-4b85-b27f-e1d07eb678c6","quantity":9,"added_at":null}],"url":"/api/carts/add"}
+{"level":"info","time":"2025-02-06T20:53:24.429+0700","caller":"logger/logger.go:79","msg":"Item added to cart","data":[{"cart_item_id":0,"cart_id":1,"product_id":"e43638ce-6aa0-4b85-b27f-e1d07eb678c6","quantity":9,"added_at":null}],"url":"/api/carts/add"}

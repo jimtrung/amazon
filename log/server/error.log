@@ -26,3 +26,4 @@
 {"level":"error","time":"2025-02-06T16:45:49.752+0700","caller":"logger/logger.go:70","msg":"Failed to get cart from database","error":"can't scan into dest[2]: cannot scan timestamptz (OID 1184) in binary format into *int","url":"/api/carts/"}
 {"level":"error","time":"2025-02-06T16:51:01.741+0700","caller":"logger/logger.go:70","msg":"Failed to get cart from database","error":"ERROR: column ci.price does not exist (SQLSTATE 42703)","url":"/api/carts/"}
 {"level":"error","time":"2025-02-06T16:52:20.982+0700","caller":"logger/logger.go:70","msg":"Failed to get cart from database","error":"ERROR: column ci.price does not exist (SQLSTATE 42703)","url":"/api/carts/"}
+{"level":"error","time":"2025-02-06T20:48:07.696+0700","caller":"logger/logger.go:70","msg":"Failed to get cart from database","error":"number of field descriptions must equal number of destinations, got 4 and 8","url":"/api/carts/"}

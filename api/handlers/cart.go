@@ -73,7 +73,7 @@ func AddToCart(c *gin.Context) {
 
 	logger.LogAndRespond(
 		c, "client/action.log", "Item added to cart",
-		nil, http.StatusOK, cartItem,
+		nil, http.StatusOK,
 	)
 }
 

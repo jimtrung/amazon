@@ -14,4 +14,3 @@ AFTER INSERT ON users
 FOR EACH ROW
 EXECUTE FUNCTION create_cart_after_user_insert();
 
-DELETE FROM users;
