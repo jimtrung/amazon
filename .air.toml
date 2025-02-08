@@ -1,0 +1,15 @@
+root = "."  # Project root
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o tmp/main.exe ./cmd/main.go"  # Ensure the output is main.exe
+  bin = "tmp/main.exe"  # Run the correct executable
+  delay = 1000
+
+[log]
+  level = "debug"
+
+[watcher]
+  dirs = ["cmd", "internal", "views"]
+  extensions = ["go", "tpl", "tmpl", "html"]
+  ignore_dirs = ["tmp", "vendor"]
