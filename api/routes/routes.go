@@ -16,15 +16,15 @@ func SetupRoutes(r *gin.Engine) {
 
 	// Products
 	products := api.Group("/products")
-	products.GET("/", handlers.GetProducts)       // ✅
-	products.POST("/transfer", handlers.Transfer) // ✅
+	products.GET("/", handlers.GetProducts)
+	products.POST("/transfer", handlers.Transfer)
 
 	// Cart
 	cart := api.Group("/carts")
-	cart.GET("/", handlers.GetCart)                                      // ✅
-	cart.POST("/add", handlers.AddToCart)                                // ✅
-	cart.PATCH("/update", handlers.UpdateCart)                           // ✅
-	cart.DELETE("/delete/:cart_id/:product_id", handlers.DeleteFromCart) // ✅
+	cart.GET("/", handlers.GetCart)
+	cart.POST("/add", handlers.AddToCart)
+	cart.PATCH("/update", handlers.UpdateCart)
+	cart.DELETE("/delete/:cart_id/:product_id", handlers.DeleteFromCart)
 
 	//User
 	users := api.Group("/users")

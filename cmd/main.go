@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/jimtrung/amazon/api/routes"
@@ -34,5 +36,6 @@ func main() {
 	routes.SetupRoutes(r)
 
 	// Start the server
-	r.Run(":" + config.PORT)
+	fmt.Println("Server is running on port", config.PORT)
+	r.Run("127.0.0.1:" + config.PORT)
 }
